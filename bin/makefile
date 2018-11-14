@@ -2,21 +2,21 @@
 all:clean  ShowServer
 
 ShowServer:
-	go build -ldflags "-s -w" -o $@ ../webserver/*.go
+	go build -ldflags "-s -w" -o $@ ../showserver/*.go
 
-buildbox:
-	go build -ldflags "-s -w" -o $@ ../boxtool/*.go
+rboxtool:
+	go build -ldflags "-s -w" -o $@ ../rboxtool/*.go
 
 clean:
-	rm -rf ./ShowServer ./buildbox
+	rm -rf ./ShowServer ./rboxtool
 
 init:
 	mkdir ./log
 
-installmbox:
+installrbox:
 	echo ${GOPATH}
-	rm -rf ${GOPATH}/src/github.com/rlds/rbox/base
-	cp -r ../base ${GOPATH}/src/github.com/rlds/rbox
+	rm -rf /soft/golib/src/github.com/rlds/rbox/base
+	cp -r ../base /soft/golib/src/github.com/rlds/rbox
 
 linux:
-	GOOS=linux go build -ldflags "-s -w" -o ShowServer ../webserver/*.go
+	GOOS=linux go build -ldflags "-s -w" -o ShowServer ../showserver/*.go

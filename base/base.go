@@ -13,8 +13,8 @@ import(
 	"errors"
 	"encoding/json"
 	"github.com/rlds/rlog"
-	"./util"
-	."./def"
+	"github.com/rlds/rbox/base/util"
+	."github.com/rlds/rbox/base/def"
 )
 
 /*
@@ -53,11 +53,12 @@ type (
 	}
 
 	//真正要实现的接口
+	/*
 	BoxWorker interface{
 		DoWork(taskid string,input map[string]string)(err error)
 		Output(taskid string)(BoxOutPut)
 	}
-	
+	*/
 	//执行器
 	Worker interface{
 		//注册至webserver

@@ -7,9 +7,9 @@
 package main
 
 import (
-	"{{.MboxPackagePath}}"
+	"github.com/rlds/rbox/base"
+	."github.com/rlds/rbox/base/def"
 	"os"
-	."{{.MboxPackagePath}}/boxdef"
 )
 
 /*
@@ -17,7 +17,7 @@ import (
 	若不清楚了解每条设置参数和含义不建议修改
 */
 func init(){
-	var cfg mbox.BoxConfig
+	var cfg base.BoxConfig
 	
 	//工具类别
 	cfg.Group                  = "{{.BoxConf.Group}}"
@@ -72,9 +72,9 @@ func init(){
     
 	cfg.Version = "1.0.1"
 	
-	err := mbox.SetBoxConfig(cfg)
+	err := base.SetBoxConfig(cfg)
 	if err != nil {
-		mbox.Log("box:",cfg.Name," init error:",err)
+		base.Log("box:",cfg.Name," init error:",err)
 		os.Exit(1)
 	}
 }

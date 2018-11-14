@@ -35,7 +35,6 @@ func (c *commandModeWorker) Run() {
 		if res.Data != nil {
 			Log(res.Data.(string))
 		}
-		//Log()
 	} else {
 		Log("命令执行错误:")
 		Log("错误代码：", res.Code)

@@ -1,11 +1,11 @@
 //
-//  mlog.go
+//  baselog.go
 //  base
 //
 //  Created by 吴道睿 on 2018/4/6.
 //  Copyright © 2018年 吴道睿. All rights reserved.
 //
-package mbox
+package base
 
 import(
     "fmt"

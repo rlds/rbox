@@ -14,8 +14,8 @@ import (
 	"text/template"
 	"time"
 
-	"rlds/mbox"
-	"rlds/mbox/util"
+	"github.com/rlds/rbox/base"
+	"github.com/rlds/rbox/base/util"
 
 	"gopkg.in/yaml.v2"
 )
@@ -24,9 +24,9 @@ import (
    计划提供成为服务
 */
 type toolConfig struct {
-	MboxPackagePath string
+//	MboxPackagePath string
 	TmplFileDirPath string
-	BuildBoxConf    mbox.BoxConfig
+	BuildBoxConf    base.BoxConfig
 }
 
 func main() {
@@ -58,15 +58,13 @@ const (
 	boxMakefileTmplFileName    = "makefile"
 	boxConfigTmplFileName      = "Config.go"
 	boxKeepstartShTmplFileName = "KeepStart.sh"
-	boxWorkerTmplFileName      = "BoxWorker.go"
+	boxWorkerTmplFileName      = "RboxWorker.go"
 )
 
 // 生成文件
 func createDo(outfiledirpath string, cfg toolConfig) {
 
 	tlcfg := make(map[string]interface{})
-
-	tlcfg["MboxPackagePath"] = cfg.MboxPackagePath
 	tlcfg["BoxConf"] = cfg.BuildBoxConf
 	tlcfg["Time"] = time.Now().Format("2006-01-02 15:04:05")
 

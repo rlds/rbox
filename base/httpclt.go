@@ -5,14 +5,14 @@
 //  Created by 吴道睿 on 2018/4/26.
 //  Copyright © 2018年 吴道睿. All rights reserved.
 //
-package mbox
+package base
 
 import(
-	   "time"
-	   "net/http"
-	   "io/ioutil"
-	   "net"
-	   "strings"
+	"time"
+	"net/http"
+	"io/ioutil"
+    "net"
+    "strings"
 )
 /*
     用于http模式注册模块

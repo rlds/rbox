@@ -1,5 +1,5 @@
 //
-//  natsMode.go
+//  runModeNats.go
 //  base
 //
 //  Created by 吴道睿 on 2018/4/6.
@@ -10,7 +10,7 @@ package base
 import(
 	"time"
 	nats "github.com/nats-io/go-nats"
-	."./def"
+	."github.com/rlds/rbox/base/def"
 )
 
 /*

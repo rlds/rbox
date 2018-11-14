@@ -7,6 +7,10 @@
 //
 package def
 
+/*
+   基础的结构定义
+*/
+
 type (
 	  //配置信息的定义结构
 	  BoxInfo struct{
@@ -63,7 +67,7 @@ type (
 	  }
 )
 
-//
+// InfoOk 检测基础信息是否完整
 func (b *BoxInfo)InfoOk()bool{
 	if b.Group == "" || b.Name == "" || b.Mode == "" || b.ModeInfo == "" {
 		return false

@@ -1,5 +1,5 @@
 //
-//  httpMode.go
+//  runModeHttp.go
 //  base
 //
 //  Created by 吴道睿 on 2018/4/6.
@@ -12,8 +12,8 @@ import(
 	"encoding/json"
 	"time"
 	"io/ioutil"
-	."./def"
-	.".util"
+	."github.com/rlds/rbox/base/def"
+	."github.com/rlds/rbox/base/util"
 )
 
 /*
