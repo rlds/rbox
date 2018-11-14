@@ -13,14 +13,14 @@ import (
 )
 
 /*
-	以下代码由boxtool自动产生，
+	以下代码由rboxtool自动产生，
 	若不清楚了解每条设置参数和含义不建议修改
 */
 func init(){
 	var cfg base.BoxConfig
 	
-	//工具类别
-	cfg.Group                  = "{{.BoxConf.Group}}"
+	//工具类别 字符串（中文字符未测试）
+	cfg.Group                  = `{{.BoxConf.Group}}`
 	
 	//工具名称
 	cfg.Name                   = `{{.BoxConf.Name}}`

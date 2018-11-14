@@ -1,5 +1,5 @@
 //  
-//  {{.BoxConf.Name}}BoxWorker.go
+//  {{.BoxConf.Name}}RboxWorker.go
 //  main
 //
 //  Created by {{.BoxConf.Author}} on {{.Time}}
@@ -17,8 +17,8 @@ import(
 	 */
 	//------------------- 需要添加代码的位置 -----------------
 	//markdown
-	"github.com/microcosm-cc/bluemonday"
-    //"gopkg.in/russross/blackfriday.v2"
+	//"github.com/microcosm-cc/bluemonday" //去除html中不安全的代码
+    "gopkg.in/russross/blackfriday.v2"
 	//-----------------------------------------------------
 )
 
@@ -28,7 +28,7 @@ type {{.BoxConf.Name}}Box struct{
 	    注意此结构为全局结构
 	    若每次任务有共同数据信息注意区分不同部分防止数据互串
 	*/
-	tidInfoMap            sync.Map   // 任务信息结果记录
+	taskIdInfoMap            sync.Map   // 任务信息结果记录
 	modeName              string     // 任务执行模式
 	isCommandMode         bool       // 是否是命令行模式(只执行一次一个任务)
 	cleanTaskTimeStep     int64      // 清理任务记录信息的时间间隔 单位秒
@@ -106,13 +106,13 @@ func (g *{{.BoxConf.Name}}Box)DoWork(taskid string,input map[string]string)(err 
 	 也可以在此记录输入在其他步骤中执行
 	 还可以移步执行存储移步执行关键指针最终存储结果
 	 */
-	_ ,ok := g.tidInfoMap.Load(taskid) 
+	_ ,ok := g.taskIdInfoMap.Load(taskid) 
 	if !ok { //
 		tskdo := new (taskResData)
 		
 		//任务开始的一些设置处理 异步执行的任务需要关注
 		tskdo.Data = "#   start"
-		g.tidInfoMap.Store(taskid,tskdo)
+		g.taskIdInfoMap.Store(taskid,tskdo)
 		if g.isCommandMode {
 			tskdo.Run(input)
 		}else{
@@ -143,13 +143,12 @@ func (g *{{.BoxConf.Name}}Box)Output(taskid string)(m BoxOutPut){
 	
 	//任务id 任务的执行结果需要根据任务id进行提取输出
 	m.TaskId    = taskid
-	tidInf,ok := g.tidInfoMap.Load(taskid)
+	tidInf,ok := g.taskIdInfoMap.Load(taskid)
 	if tidInf != nil && ok {
 		tidin := tidInf.(*taskResData)
 		/*
 		 下面为任务结果的一些处理
 		 */
-		
 		
 		/*
 		 这里输出box执行结果
@@ -191,7 +190,7 @@ func (g *{{.BoxConf.Name}}Box)cleanTaskInfo(){
 	for {
 		time.Sleep( clean_step )
 		g.lastCleanStartTime  = time.Now().Unix()
-		g.tidInfoMap.Range(g.rangeTidInfoDo)
+		g.taskIdInfoMap.Range(g.rangeTidInfoDo)
 	}
 }
 
@@ -200,8 +199,7 @@ func (g *{{.BoxConf.Name}}Box)rangeTidInfoDo(key ,val interface{})bool{
 	tidinf := val.(*taskResData)
 	if (tidinf.endTime + g.taskInfoStoreTimeStep ) > g.lastCleanStartTime {
 		//删除任务的记录信息
-		g.tidInfoMap.Delete(key)
+		g.taskIdInfoMap.Delete(key)
 	}
 	return true
 }
-

@@ -24,7 +24,6 @@ import (
    计划提供成为服务
 */
 type toolConfig struct {
-//	MboxPackagePath string
 	TmplFileDirPath string
 	BuildBoxConf    base.BoxConfig
 }
