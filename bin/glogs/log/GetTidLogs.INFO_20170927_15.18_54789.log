@@ -1,0 +1,8 @@
+Log file created at: 2017/09/27 15:18:31
+Binary: Built with gc go1.9 for darwin/amd64
+Log line format: [ISW]mmdd hh:mm:ss.uuuuuu threadid ] msg
+[ 20170927 15:18:31.882263 INFO ]boxUrlPath:/master/GetTidLogs
+[ 20170927 15:18:31.882646 INFO ]httpModeStart::9876
+[ 20170927 15:18:31.882650 INFO ]{{master GetTidLogs tid日志查询 [{17位任务id 任务Tid tid text   1}] 金山 获取master所有相关日志 http 1.0.1  http://localhost:9876} ./log :9876 http://localhost:9888/regbox   }
+[ 20170927 15:18:31.935654 INFO ]regok:{"Type":"RegBox_Ok","Code":"0","ReturnMsg":"","TaskId":"","Data":null}
+[ 20170927 15:18:31.935761 INFO ]ListenAndServe error:%slisten tcp :9876: bind: address already in use

@@ -1,0 +1,10 @@
+Log file created at: 2017/09/27 15:19:10
+Binary: Built with gc go1.9 for darwin/amd64
+Log line format: [ISW]mmdd hh:mm:ss.uuuuuu threadid ] msg
+[ 20170927 15:19:10.931202 INFO ]boxUrlPath:/master/GetTidLogs
+[ 20170927 15:19:10.931568 INFO ]httpModeStart::9876
+[ 20170927 15:19:10.931573 INFO ]{{master GetTidLogs tid日志查询 [{17位任务id 任务Tid tid text   1}] 金山 获取master所有相关日志 http 1.0.1  http://localhost:9876} ./log :9876 http://localhost:9888/regbox   }
+[ 20170927 15:19:10.934956 INFO ]regok:{"Type":"RegBox_Ok","Code":"0","ReturnMsg":"","TaskId":"","Data":null}
+[ 20170927 15:19:53.093060 INFO ]T:ba50H9CEAHoW90sC0 F:webserver/v1.0.1/wdr C:GetTidLogs I:map[tid:ndchdc]
+[ 20170927 15:22:54.650855 INFO ]T:ba50H9CEAHoW90sC0 F:webserver/v1.0.1/wdr C:GetTidLogs I:map[tid:dcbscd]
+dhdhd
