@@ -14,7 +14,7 @@ import(
        "encoding/hex"
 )
 
-//
+// GetMd5Str MD5
 func GetMd5Str(b []byte)string{
     h := md5.New()
     h.Write(b)

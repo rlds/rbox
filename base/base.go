@@ -137,6 +137,7 @@ func (m *rbox)checkcfg()error{
 	return nil
 }
 
+// Init 初始化
 func Init(){
 	var (
 	     mode  string
@@ -151,6 +152,7 @@ func Init(){
 		Log("init error:",err)
 		os.Exit(2)
 	}
+	// 服务模式启动日志
 	if !isCommand {
 		util.TestAndCreateDir(gbox.cfg.LogDir)
 		rlog.LogInit(3, gbox.cfg.LogDir , MaxLogLen_m , 1)

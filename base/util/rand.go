@@ -13,6 +13,9 @@ import(
 	"time"
 )
 
+/*
+    随机数，随机字符串
+*/
 var (
 	BaseRandInt = 4  //用于产生一个int数字
 	BaseRandUint64  = int64(1024 * 1024 * 1024 * 1024) //用于产生一个uint64数字的
@@ -27,11 +30,13 @@ func SetBaseString(basestr string){
 	return
 }
 
+// GetInt8 
 func GetInt8()int{
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	return r.Intn(256)
 }
 
+// GetInt 
 func GetInt(n int)int{
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	return r.Intn(n)

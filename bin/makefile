@@ -1,9 +1,6 @@
 
 all:clean  ShowServer
 
-GetTidLogs:
-	go build -ldflags "-s -w" -o $@ ../getlog/*.go
-
 ShowServer:
 	go build -ldflags "-s -w" -o $@ ../webserver/*.go
 
@@ -11,15 +8,15 @@ buildbox:
 	go build -ldflags "-s -w" -o $@ ../boxtool/*.go
 
 clean:
-	rm -rf ./ShowServer ./GetTidLogs ./buildbox
+	rm -rf ./ShowServer ./buildbox
 
 init:
 	mkdir ./log
 
 installmbox:
 	echo ${GOPATH}
-	rm -rf ${GOPATH}/src/rlds/mbox
-	cp -r ../mbox ${GOPATH}/src/rlds/
+	rm -rf ${GOPATH}/src/github.com/rlds/rbox/base
+	cp -r ../base ${GOPATH}/src/github.com/rlds/rbox
 
 linux:
 	GOOS=linux go build -ldflags "-s -w" -o ShowServer ../webserver/*.go
