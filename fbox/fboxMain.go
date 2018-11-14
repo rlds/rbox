@@ -1,10 +1,10 @@
 //  
 //  fboxMain.go
-//  main
+//  fbox
 //
 //  Created by 吴道睿 on 2018-11-14 17:51:14
 //
-package main
+package fbox
 
 import(
 	"github.com/rlds/rbox/base"

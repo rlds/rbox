@@ -28,4 +28,3 @@ func Log(args ...interface{}){
 		rlog.V(1).Info(args...)
 	}
 }
-

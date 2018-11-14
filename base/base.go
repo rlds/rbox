@@ -25,7 +25,6 @@ type (
 	rbox struct{
 		box        Box      //具体的box
 		worker     Worker   //具体执行器
-		
 		cfg        BoxConfig //配置信息
 		
 		//每个任务进行编号
@@ -33,7 +32,6 @@ type (
 		systime_u  int64    //系统时间
 	}
     
-	
 	//配置信息的定义结构
 	BoxConfig struct{
 		BoxInfo
@@ -45,20 +43,12 @@ type (
 		NatsServerUserPassword string      //nats 接入密码
 	}
 	
-	
 	//具体工具的接口定义，每个工具的实现为此接口的实现
 	Box interface{
 		DoWork(taskid string,input map[string]string)(err error)
 		Output(taskid string)(BoxOutPut)
 	}
 
-	//真正要实现的接口
-	/*
-	BoxWorker interface{
-		DoWork(taskid string,input map[string]string)(err error)
-		Output(taskid string)(BoxOutPut)
-	}
-	*/
 	//执行器
 	Worker interface{
 		//注册至webserver
@@ -169,4 +159,3 @@ func RegisterBox(b Box){
 func Run(){
 	gbox.worker.Run()
 }
-

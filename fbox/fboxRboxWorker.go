@@ -1,17 +1,17 @@
 //  
 //  fboxRboxWorker.go
-//  main
+//  fbox
 //
 //  Created by 吴道睿 on 2018-11-14 17:51:14
 //
-package main
+package fbox
 
 import(
 	"github.com/rlds/rbox/base"
 	."github.com/rlds/rbox/base/def"
 	"sync"
 	"time"
-	   
+	
 	/*
 		下面为需要添加引入的包
 	 */
@@ -47,7 +47,7 @@ const(
 	  C_TaskInfoStoreTimeStep =  60 * 5 //5分钟
 	  )
 
-type TFunc func(map[string]string)string
+type TFunc func(map[string]string)(string,string)
 var taskFunc TFunc
 
 func RegisterFunc(f TFunc){
@@ -69,11 +69,11 @@ func (l *taskResData)Run(in map[string]string){
 	 */
 	
 	//任务执行完成的处理
-	l.Data = taskFunc(in)
+	l.Data,l.Type = taskFunc(in)
 	l.IsSync = true
 	l.Status = "COMPLETE"
 	l.endTime = time.Now().Unix()
-	base.Log(in," ret:",len(rets))
+	base.Log(in," ret:",l.Type)
 }
 
 func (g *fboxBox)Init()bool{
@@ -158,6 +158,7 @@ func (g *fboxBox)Output(taskid string)(m BoxOutPut){
 		 */
 		m.IsSync = tidin.IsSync 
 		m.Status = tidin.Status
+		m.Type   = tidin.Type
 		if tidin.Data != nil {
 			resDat := tidin.Data.(string)
 			if g.isCommandMode {
@@ -167,12 +168,28 @@ func (g *fboxBox)Output(taskid string)(m BoxOutPut){
 				    其他模式情况下当数据量过大或涉及到外部计算量过大时的处理
 				 */
 				//------------------- 需要添加代码的位置 -----------------
-				//m.Data = resDat
-				m.Type      = "html"
-				//base.Log(taskid,"markdown chg")
-				m.Data = string(blackfriday.Run([]byte(resDat)))
-				//unsafe := blackfriday.Run([]byte(resDat))
-				//m.Data  = string(bluemonday.UGCPolicy().SanitizeBytes(unsafe))
+				switch(m.Type) {
+					case "markdown":{
+                        //m.Data = resDat
+				        m.Type      = "html"
+				        //base.Log(taskid,"markdown chg")
+				        m.Data = string(blackfriday.Run([]byte(resDat)))
+				        //unsafe := blackfriday.Run([]byte(resDat))
+				        //m.Data  = string(bluemonday.UGCPolicy().SanitizeBytes(unsafe))
+					}
+					case "json":{ //json格式的格式化
+                        m.Type      = "html"
+						m.Data = resDat
+					}
+					case "html","HTML":{
+						m.Type      = "html"
+                        m.Data = resDat
+					}
+					default:{
+						m.Type      = "html"
+						m.Data = resDat
+					}
+				}
 				//-----------------------------------------------------
 			}
 		}else{
