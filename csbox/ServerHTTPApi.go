@@ -127,6 +127,9 @@ func pages(w http.ResponseWriter, r *http.Request){
 						case "woff2":{
 							contype = "font/woff2"
 						}
+						case "wasm":{
+							contype = "application/wasm"
+						}
 						case "ico":{
 							
 						}
