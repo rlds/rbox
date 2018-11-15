@@ -65,6 +65,7 @@ func createDo(outfiledirpath string, cfg toolConfig) {
 	tlcfg := make(map[string]interface{})
 	tlcfg["BoxConf"] = cfg.BuildBoxConf
 	tlcfg["Time"] = time.Now().Format("2006-01-02 15:04:05")
+	tlcfg["InEg"] = base.ParamToMapEg(cfg.BuildBoxConf)
 
 	tmplDirPath := cfg.TmplFileDirPath
 

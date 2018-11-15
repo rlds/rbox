@@ -1,8 +1,8 @@
 
 all:clean  ShowServer
 
-ShowServer:
-	go build -ldflags "-s -w" -o $@ ../showserver/*.go
+csbox:
+	go build -ldflags "-s -w" -o $@ ../csbox/*.go
 
 rboxtool:
 	go build -ldflags "-s -w" -o $@ ../rboxtool/*.go
@@ -12,7 +12,7 @@ fboxtool:
 
 
 clean:
-	rm -rf ./ShowServer ./rboxtool
+	rm -rf ./csbox ./rboxtool ./fboxtool
 
 init:
 	mkdir ./log

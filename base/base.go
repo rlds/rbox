@@ -15,6 +15,7 @@ import(
 	"github.com/rlds/rlog"
 	"github.com/rlds/rbox/base/util"
 	."github.com/rlds/rbox/base/def"
+	"strings"
 )
 
 /*
@@ -128,14 +129,23 @@ func (m *rbox)checkcfg()error{
 	return nil
 }
 
+func ParamToMapEg(cfg BoxConfig)string{
+	ret := []string{}
+	for _,param := range cfg.Params {
+        ret = append(ret,`"`+param.Name+`":""`)
+	}
+    return "{" + strings.Join(ret,",")+"}"
+}
+
 // Init 初始化
 func Init(){
+	//输出设置信息
 	var (
 	     mode  string
 		 input string
 	)
-	flag.StringVar(&mode,"mode","","运行模式(http,command,nats)")
-	flag.StringVar(&input,"input","","输入参数信息json格式")
+	flag.StringVar(&mode,"mode","","运行模式(http,command,nats) eg: -mode http")
+	flag.StringVar(&input,"input","","输入参数信息json格式 eg: -input '" + ParamToMapEg(gbox.cfg) + "'")
 	flag.Parse()
 	//模式设置
 	err := gbox.setMode(mode,input)

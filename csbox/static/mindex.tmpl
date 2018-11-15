@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+		<link href="/css/bootstrap.css" rel="stylesheet">
+		<link href="/css/boxshow.css" rel="stylesheet">
+		<title>mbox操作台</title>
+	</head>
+	<body >
+		<div class="Pagebody">
+			<div class="Header navbar-fixed-top"><a >登录</a></div>
+			<!-- 这里是留空白用于占位 -->
+			<div class="PlaceHolder"> </div>
+			<div id="Container" class="Container container">
+				<div id="grouplist" class="Sidebar nav nav-list bs-docs-sidenav affix">
+					{{template "grouplist" .Grouplist}}
+				</div>
+				<div class="MainBody">
+					<div class="SubBar">
+						<div class="BoxPlace"></div>
+						<!-- 工具项多于5项时提供选择 -->
+						{{if .Bm}}
+						{{template "boxsel_m" .Boxsel_m}}
+						{{else}}
+						<!-- 工具项小于6项时 -->
+						{{template "boxsel" .Boxsel}}
+						{{end}}
+						<script >
+							var sel_boxname = "{{.Boxinfo.Name}}";
+							var sel_groupname = "{{.Boxinfo.Group}}";
+						</script>
+						<div class="BoxInput">
+							<div class="BoxPlace"></div>
+							<!-- 选中的具体工具可用并且有附加参数时展示 -->
+							{{template "boxparam" .Boxparam}}
+							<!-- 所选工具信息展示 -->
+							{{template "boxinfo" .Boxinfo}}
+						</div>
+					</div>
+					<div class="ResTitle">返回结果：</div>
+					<div class="ResBody" id="boxResData">
+					</div>
+				</div>
+			</div>
+			<!--<div class="Footer footer">底部边栏</div>-->
+		</div>
+	</body>
+	<script src="/js/jquery.js"></script>
+	<script src="/js/markdown.js"></script>
+	<script src="/js/csbox.js">
+	</script>
+</html>

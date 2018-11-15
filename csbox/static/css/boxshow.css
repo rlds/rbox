@@ -1,0 +1,281 @@
+/*
+*  boxshow.css
+*  csbox
+*
+*  Created by 吴道睿 on 2018/4/26.
+*  Copyright © 2018年 吴道睿. All rights reserved.
+*/
+
+.Pagebody{
+	width:100%;
+	margin-top:0;
+	margin-left:auto;
+	margin-right:auto;
+	position: relative;
+	border-width: 0 0 1px;
+	border: 1px solid transparent;
+	margin-bottom: 0;
+	border-bottom: 0;
+	left:auto;
+	right:auto;
+	position: absolute;
+	height: 100%;
+	top: 0;
+}
+
+.Container {
+   *zoom: 1;
+}
+
+.Container:after{ 
+    content: ""; 
+    display: block; 
+    height: 0; 
+	visibility:hidden; 
+	clear: both;
+}
+
+.Header{
+   width: 100%; 
+   height: 20px; 
+   margin: 0 auto; 
+   background: #101010;
+   color: #9d9d9d;
+}
+
+.PlaceHolder{
+	width:100%;
+	height:30px;
+}
+
+#Container{
+   width: 100%; 
+   min-height: 300px; 
+   margin: 0 auto;
+}
+
+/*
+   左侧选择
+*/
+.Sidebar{ 
+   float: left;
+   width: 20%;
+   height: 100%; 
+   overflow: scroll;
+   padding: 15px 0;
+   text-align: center;
+   background-color: #f5f5f5;
+   border-top: 1px solid #fff;
+   border-bottom: 1px solid #ddd;
+   border-radius: 6px;
+   line-height: 1.3333333;
+}
+
+/*
+   右边主体
+*/
+.MainBody{ 
+	float:right;
+    width: 79%; 
+	height: 100%; 
+	overflow: scroll;
+}
+
+.BoxSearch{
+	margin-top:5px;
+	margin-left:5px;
+	width:80%;
+}
+
+.SearchD{
+	line-height: 1.42857143;
+	border: 1px solid #ddd;
+	border-radius: 6px;
+}
+
+.SearchLabel{
+	width:auto;
+	padding: 6px 15px;
+	font-size: 14px;
+	border-bottom: 1px solid #ccc;
+	border-top: 1px solid #ccc;
+	border-left: 1px solid #ccc;
+	border-radius: 6px;
+	height: 34px;
+	/*
+	border-bottom-right-radius: inherit;
+	border-top-right-radius: inherit;
+	 */
+}
+
+.SearchSelect{
+	padding-left: 0px;
+}
+
+.SubBar{
+	border-top: 1px solid #fff;
+	border-bottom: 1px solid #ddd;
+	border-radius: 6px;
+	margin-top : 0px;
+	border: 1px solid #ddd;
+}
+
+.BoxSelect{
+	margin-left: 5px;
+	margin-right: 6px;
+}
+
+.nav-tabs > li.active > bx, .nav-tabs > li.active > bx:hover, .nav-tabs > li.active > bx:focus {
+	color: #555;
+	cursor: default;
+	background-color: #fff;
+	border: 1px solid #ddd;
+	border-bottom-color: transparent;
+}
+.nav-tabs > li > bx {
+	margin-right: 2px;
+	line-height: 1.42857143;
+	border: 1px solid transparent;
+	border-radius: 4px 4px 0 0;
+}
+.nav > li > bx {
+	position: relative;
+	display: block;
+	padding: 6px 15px;
+}
+bx {
+	color: #337ab7;
+	text-decoration: none;
+}
+bx {
+	background-color: transparent;
+}
+/*
+    工具组件大类别外层
+*/
+.BoxTypeCT{
+	border: 1px solid #ddd;
+	border-radius: 6px;
+}
+
+.SidebarWH{
+	width:100%;
+}
+
+.BoxPlace{
+	width:100%;
+	height:10px;
+}
+
+.BoxInput{
+	border-left: 1px solid #ddd;
+	margin-left: 5px;
+	margin-bottom: 8px;
+	border-bottom: 1px solid #ddd;
+	border-right: 1px solid #ddd;
+	margin-right: 6px;
+	border-radius: 0 0 4px 4px ;
+}
+.BoxForm{
+	margin-top:12px;
+}
+
+.ResTitle{
+	border: 1px solid #ddd;
+	margin-top : 5px;
+	height:40px;
+	border-radius:4px;
+	padding: 7px 15px;
+	font-size: 16px;
+}
+
+.ResBody{
+	margin-top : 5px;
+	border: 1px solid #ddd;
+	border-radius: 6px;
+	min-height:100px;
+	
+}
+
+.Footer{ 
+	width: 100%; 
+	height: 30px; 
+	background: #08f;
+	border-top: 1px solid #fff;
+	position: fixed;
+	background: rgba(0,0,0,.7);
+}
+
+.BoxInputParam{
+	margin-left:2px;
+	margin-top:4px;
+}
+
+.BoxInputParam >span {
+	width:90px;
+	padding: 4px 15px;
+	font-size: 14px;
+	border-top: 1px solid #ddd;
+	border-radius: 6px;
+	border-bottom: 1px solid #ddd;
+	/* border-bottom-left-radius: initial; */
+	border-left: 1px solid #ddd;    
+	border-bottom-right-radius: initial;
+	border-top-right-radius: initial;
+	border-right: 1px solid #ddd;
+}
+
+.BoxInputParam >input{
+	/*width: 180px;*/
+	border-radius: 6px;
+	height: 30px;
+	padding: 4px 15px;
+	font-size: 14px;
+	border-top: 1px solid #ddd;
+	border-radius: 6px;
+	border-bottom: 1px solid #ddd;
+	border-right: 1px solid #ddd;
+	border-left: white;
+	border-bottom-left-radius: unset;
+	border-top-left-radius: unset;
+}
+
+
+.BoxInputSubmit{
+	width: 100%;
+	height:30px;
+	padding: 10px 10px;
+	font-size: 14px;
+	bottom:5px;
+}
+
+.BoxInputSubmit >input{
+	width: 100px;
+	border-radius: 6px;
+	font-size: 14px;
+	border-top: 1px solid #ddd;
+	border-bottom: 1px solid #ddd;
+	border-right: 1px solid #ddd;
+	border-left: 1px solid #ddd;
+	background: #3bc1c1;
+	margin-left:15%;
+}
+
+.InfoLine{
+	margin-left: 10px;
+}
+.InfoLine > div{
+	width:auto;
+	padding: 6px 15px;
+	font-size: 14px;
+}
+
+/* 自动换行  */
+li , p {
+	word-wrap: break-word;
+	word-break: normal;
+}
+
+bx{
+	height: 32px;
+}
