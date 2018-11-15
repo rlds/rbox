@@ -3,3 +3,5 @@ log/*
 bin/log/*
 bin/tmpl/*
 bin/glogs/*
+test
+test/*
