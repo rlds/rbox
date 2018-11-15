@@ -74,7 +74,6 @@ func (b *boxInfo) TaskRes(indat def.RequestIn) (rt def.BoxOutPut) {
 //http模式访问执行
 func (b *boxInfo) httpMode(indat def.RequestIn) (rt def.BoxOutPut) {
 	urlpath := b.ModeInfo + "/call/" + b.Group + "/" + b.Name
-	println(urlpath)
 	retb, err := HttpPostJson(urlpath, util.ObjToStr(indat))
 	if err == nil {
 		err = json.Unmarshal(retb, &rt)
@@ -87,7 +86,6 @@ func (b *boxInfo) httpMode(indat def.RequestIn) (rt def.BoxOutPut) {
 		//成功返回  不修改返回状态
 		//rt.Type      = BoxOutPut_CallBox_Ok
 		//rt.Code      = BoxOutPut_Code_Ok
-
 	} else {
 		rt.Type = CallBoxResTypeBoxRetErr
 		rt.Code = CallBoxCodeBoxRetErr_110
@@ -99,7 +97,7 @@ func (b *boxInfo) httpMode(indat def.RequestIn) (rt def.BoxOutPut) {
 //http模式访问执行
 func (b *boxInfo) httpModeTaskRes(indat def.RequestIn) (rt def.BoxOutPut) {
 	urlpath := b.ModeInfo + "/taskRes/" + b.Group + "/" + b.Name
-	println(urlpath)
+	//println(urlpath)
 	retb, err := HttpPostJson(urlpath, util.ObjToStr(indat))
 	if err == nil {
 		err = json.Unmarshal(retb, &rt)
@@ -123,18 +121,17 @@ func (b *boxInfo) httpModeTaskRes(indat def.RequestIn) (rt def.BoxOutPut) {
 
 //nats 模式访问执行
 func (b *boxInfo) natsMode(indat def.RequestIn) (rt def.BoxOutPut) {
-	natstopic := b.ModeInfo + "." + b.Group + "." + b.Name
+	//natstopic := b.ModeInfo + "." + b.Group + "." + b.Name
 	//
-	println(natstopic)
+	//println(natstopic)
 	return
 }
 
 //nats 模式访问执行
 func (b *boxInfo) natsModeTaskRes(indat def.RequestIn) (rt def.BoxOutPut) {
-	natstopic := b.ModeInfo + "." + b.Group + "." + b.Name
+	//natstopic := b.ModeInfo + "." + b.Group + "." + b.Name
 	//
-
-	println(natstopic)
+	//println(natstopic)
 	return
 }
 

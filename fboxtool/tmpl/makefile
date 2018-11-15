@@ -1,8 +1,8 @@
 
-all:fbox
+all:{{.BoxConf.Name}}
 
-fbox:
+{{.BoxConf.Name}}:
 	go build -ldflags "-s -w" -o $@ ./*.go
 
 clean:
-	rm -rf ./fbox
+	rm -rf ./{{.BoxConf.Name}}

@@ -10,6 +10,9 @@ rboxtool:
 fboxtool:
 	go build -ldflags "-s -w" -o $@ ../fboxtool/*.go
 
+csboxWebAssembly:
+	GOARCH=wasm GOOS=js go build -o ../csbox/static/js/csbox.wasm ../csbox/webassembly/*.go
+
 clean:
 	rm -rf ./csbox ./rboxtool ./fboxtool
 

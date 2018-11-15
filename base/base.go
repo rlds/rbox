@@ -132,7 +132,7 @@ func (m *rbox)checkcfg()error{
 func ParamToMapEg(cfg BoxConfig)string{
 	ret := []string{}
 	for _,param := range cfg.Params {
-        ret = append(ret,`"`+param.Name+`":""`)
+        ret = append(ret,`"`+param.Name+`":"`+param.Value+`"`)
 	}
     return "{" + strings.Join(ret,",")+"}"
 }

@@ -280,7 +280,10 @@ func (s *sysdata)checkeAlive(){
 		for _,bgf := range s.mbgf {
 			for _ ,v := range bgf.mbif {
 				if v.connType == "http" {
-					v.isAlive = pingBox(v.ModeInfo)
+					v.isAlive = pingBox(v.ModeInfo+"/ping")
+					if !v.isAlive {
+                        Log(v.Name," 心跳检测失效，将不可用")
+					}
 				}
 			}
 		}
@@ -288,8 +291,9 @@ func (s *sysdata)checkeAlive(){
 	}
 }
 
-func pingBox(urls string)bool{
-	data,err := base.RegBoxPost(urls,"")
+func pingBox(urlstr string)bool{
+	data,err := base.RegBoxPost(urlstr,"")
+	Log(urlstr,"res:",string(data))
 	if err == nil && string(data) == "ok" {
 		return true
 	}
