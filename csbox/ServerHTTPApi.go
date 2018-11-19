@@ -362,7 +362,7 @@ func callbox(w http.ResponseWriter, r *http.Request){
 			params[k] = v[0]
 		}
 	}
-	
+	params["remoteAddr"] = r.RemoteAddr
 	//------------------------------
 	arr = strings.Split(r.URL.Path,"/")
 	if len(arr) > 3 {

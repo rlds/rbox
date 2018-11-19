@@ -36,6 +36,11 @@ func StrToInt(s string)int{
 	return i
 }
 
+// IntToStr 
+func IntToStr(i int)string{
+    return strconv.Itoa(i)
+}
+
 // Uint64ToByte Uint64ToByte
 func Uint64ToByte(u uint64)(b []byte){
 	b=make([]byte,8)
