@@ -36,7 +36,7 @@ const(
 	  RegBoxCodeInputErr_107    = "107"
 	  RegBoxCodeInputErr_108    = "108"
 	  RegBoxCodeInputErr_109    = "109"
-	  RegBox_ResType_InputErr     = "RegboxErr"
+	  RegBox_ResType_InputErr   = "RegboxErr"
 	  
 	  CallBoxCodeBoxRetErr_110 = "110"
 	  CallBoxResTypeBoxRetErr   = "BoxRetErr"

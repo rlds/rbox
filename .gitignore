@@ -18,3 +18,5 @@ bin/tmpl/*
 bin/glogs/*
 test
 test/*
+bin/*box
+bin/*tool
