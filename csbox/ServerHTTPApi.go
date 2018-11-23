@@ -11,10 +11,11 @@ import(
    "net/http"
    "io/ioutil"
    "encoding/json"
-   "github.com/rlds/rbox/base/util"
    "strings"
-   ."github.com/rlds/rbox/base/def"
    "text/template"
+
+   "github.com/rlds/rbox/base/util"
+   ."github.com/rlds/rbox/base/def"
 )
 
 const(
@@ -362,7 +363,10 @@ func callbox(w http.ResponseWriter, r *http.Request){
 			params[k] = v[0]
 		}
 	}
-	params["remoteAddr"] = r.RemoteAddr
+	Log("header:",util.ObjToStr(r.Header))
+    //   params["xRealIP"]       = r.Header.Get("X-Real-Ip")
+	//   params["xForwardedFor"] = r.Header.Get("X-Forwarded-For")
+	params["remoteAddr"]    = r.RemoteAddr
 	//------------------------------
 	arr = strings.Split(r.URL.Path,"/")
 	if len(arr) > 3 {
