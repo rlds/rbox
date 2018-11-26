@@ -145,7 +145,6 @@ func Init(){
 		 input string
 		 logdir string
 	)
-//	flag.StringVar(&exconfigpath,"exconfig","../conf/config.conf","额外的配置参数文件路径")
 	flag.StringVar(&logdir,"log",gbox.cfg.LogDir,"日志输出文件夹路径")
 	flag.StringVar(&mode,"mode","","运行模式(http,command,nats) eg: -mode http")
 	flag.StringVar(&input,"input","","输入参数信息json格式 eg: -input '" + ParamToMapEg(gbox.cfg) + "'")
