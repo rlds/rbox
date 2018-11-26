@@ -143,7 +143,10 @@ func Init(){
 	var (
 	     mode  string
 		 input string
+		 logdir string
 	)
+//	flag.StringVar(&exconfigpath,"exconfig","../conf/config.conf","额外的配置参数文件路径")
+	flag.StringVar(&logdir,"log",gbox.cfg.LogDir,"日志输出文件夹路径")
 	flag.StringVar(&mode,"mode","","运行模式(http,command,nats) eg: -mode http")
 	flag.StringVar(&input,"input","","输入参数信息json格式 eg: -input '" + ParamToMapEg(gbox.cfg) + "'")
 	flag.Parse()
@@ -155,6 +158,8 @@ func Init(){
 	}
 	// 服务模式启动日志
 	if !isCommand {
+		// 日志文件路径以输入为准
+		gbox.cfg.LogDir = logdir
 		util.TestAndCreateDir(gbox.cfg.LogDir)
 		rlog.LogInit(3, gbox.cfg.LogDir , MaxLogLen_m , 1)
 	}
