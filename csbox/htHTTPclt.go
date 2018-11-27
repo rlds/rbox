@@ -1,5 +1,5 @@
 //
-//  httpclt.go
+//  htHTTPclt.go
 //  rbox
 //
 //  Created by 吴道睿 on 2018/4/20.
@@ -8,35 +8,35 @@
 package main
 
 /*
-    http客户端
+   http客户端
 */
-import(
-	"time"
-	"net/http"
+import (
 	"io/ioutil"
 	"net"
-	"sync"
+	"net/http"
 	"strings"
+	"sync"
+	"time"
 )
 
 var (
-    requestimeout      = time.Second * 10
-    requestRetryTimes  = 3
-    lc  sync.RWMutex
-    hcleintmap        map[string]*http.Client
+	requestimeout     = time.Second * 10
+	requestRetryTimes = 3
+	lc                sync.RWMutex
+	hcleintmap        map[string]*http.Client
 )
 
-func httpClinetmapInit(){
+func httpClinetmapInit() {
 	hcleintmap = make(map[string]*http.Client)
 }
 
-func setHostClt(host string,clt *http.Client){
+func setHostClt(host string, clt *http.Client) {
 	lc.Lock()
 	hcleintmap[host] = clt
 	lc.Unlock()
 }
 
-func httpClientInit()(ts *http.Client){
+func httpClientInit() (ts *http.Client) {
 	ts = &http.Client{
 		Transport: &http.Transport{
 			Dial: func(netw, addr string) (net.Conn, error) {
@@ -44,9 +44,9 @@ func httpClientInit()(ts *http.Client){
 				if err != nil {
 					return nil, err
 				}
-				conn.SetDeadline(time.Now().Add(requestimeout))//time.Second * d_time))
-				//tcp_conn := conn.(*net.TCPConn)                                                                                                  
-				//tcp_conn.SetKeepAlive(false) 
+				conn.SetDeadline(time.Now().Add(requestimeout)) //time.Second * d_time))
+				//tcp_conn := conn.(*net.TCPConn)
+				//tcp_conn.SetKeepAlive(false)
 				return conn, nil
 			},
 			//DisableKeepAlives: true,
@@ -59,129 +59,129 @@ func httpClientInit()(ts *http.Client){
 /*
    http请求客户端  GET
 */
-func HttpGet(urlstr string)(body []byte,err error){
-	re_times:=0
+// HTTPGet Get
+func HTTPGet(urlstr string) (body []byte, err error) {
+	reTimes := 0
 	var (
-		 r    *http.Request
-		 resp *http.Response
-		 result []byte
+		r      *http.Request
+		resp   *http.Response
+		result []byte
 	)
 	r, err = http.NewRequest("GET", urlstr, nil)
 	if err != nil {
 		return
 	}
-	
+
 	r.Header.Add("Connection", "close")
-	
-	RECONNECT:
-	
+
+RECONNECT:
+
 	dhost := r.URL.Host
-	htc,ok := hcleintmap[dhost]
+	htc, ok := hcleintmap[dhost]
 	if !ok || htc == nil {
 		htc = httpClientInit()
-		setHostClt(dhost,htc)
+		setHostClt(dhost, htc)
 	}
-	
+
 	ok = false
-	if resp,err = htc.Do(r) ;err == nil{
+	if resp, err = htc.Do(r); err == nil {
 		result, err = ioutil.ReadAll(resp.Body)
 		if err != nil {
 			return
 		}
 		resp.Body.Close()
 		body = result
-		ok   = true
-	}else{
-		Log("err2[",err,"]")
+		ok = true
+	} else {
+		Log("err2[", err, "]")
 		time.Sleep(time.Second)
-		if re_times < requestRetryTimes {
-			re_times ++
-			Log("尝试第[",re_times,"] 次重新连接")
+		if reTimes < requestRetryTimes {
+			reTimes++
+			Log("尝试第[", reTimes, "] 次重新连接")
 			goto RECONNECT
 		}
 	}
 	return
 }
 
-
-//    POST urlencode
-func HttpPost(urlstr,data string)(body []byte,err error){
-	re_times := 0
+// HTTPPost   POST urlencode
+func HTTPPost(urlstr, data string) (body []byte, err error) {
+	reTimes := 0
 	var (
-		 r    *http.Request
-		 resp *http.Response
-		 result []byte
+		r      *http.Request
+		resp   *http.Response
+		result []byte
 	)
 	r, err = http.NewRequest("POST", urlstr, strings.NewReader(data))
 	if err != nil {
 		return
 	}
 	r.Header.Add("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
-	
-	RECONNECT:	
+
+RECONNECT:
 	dhost := r.URL.Host
-	htc,ok := hcleintmap[dhost]
+	htc, ok := hcleintmap[dhost]
 	if !ok || htc == nil {
 		htc = httpClientInit()
-		setHostClt(dhost,htc)
+		setHostClt(dhost, htc)
 	}
 	ok = false
-	if resp,err = htc.Do(r) ;err == nil{
+	if resp, err = htc.Do(r); err == nil {
 		result, err = ioutil.ReadAll(resp.Body)
 		if err != nil {
-			Log("err1[", err,"]")
+			Log("err1[", err, "]")
 			return
 		}
 		resp.Body.Close()
 		body = result
-		ok   = true
-	}else{
-		Log("err2[",err,"]")
-		if re_times < requestRetryTimes {
-			re_times ++
-			Log("尝试第[",re_times,"] 次重新连接")
+		ok = true
+	} else {
+		Log("err2[", err, "]")
+		if reTimes < requestRetryTimes {
+			reTimes++
+			Log("尝试第[", reTimes, "] 次重新连接")
 			goto RECONNECT
 		}
 	}
 	return
 }
 
-//  json 格式数据发布
-func HttpPostJson(urlstr,data string)(body []byte,err error){
-	re_times := 0
+// HTTPPostJSON json 格式数据发布
+func HTTPPostJSON(urlstr, data string) (body []byte, err error) {
+	reTimes := 0
 	var (
-	    r    *http.Request
-		resp *http.Response
+		r      *http.Request
+		resp   *http.Response
 		result []byte
 	)
-	
+
 	r, err = http.NewRequest("POST", urlstr, strings.NewReader(data))
 	if err != nil {
 		return
 	}
 	r.Header.Add("Content-Type", "application/json; charset=UTF-8")
 
-	RECONNECT:	
-	dhost  := r.URL.Host
-	htc,ok := hcleintmap[dhost]
+RECONNECT:
+	dhost := r.URL.Host
+	htc, ok := hcleintmap[dhost]
 	if !ok || htc == nil {
 		htc = httpClientInit()
-		setHostClt(dhost,htc)
+		setHostClt(dhost, htc)
 	}
-	
+
 	ok = false
-	if resp,err = htc.Do(r) ;err == nil{
+	if resp, err = htc.Do(r); err == nil {
 		result, err = ioutil.ReadAll(resp.Body)
 		if err != nil {
 			return
 		}
 		resp.Body.Close()
 		body = result
-		ok   = true
-	}else{
-		if re_times < requestRetryTimes {
-			re_times ++
-			Log("尝试第[",re_times,"] 次重新连接")
+		ok = true
+	} else {
+		if reTimes < requestRetryTimes {
+			reTimes++
+			Log("尝试第[", reTimes, "] 次重新连接")
 			goto RECONNECT
 		}
 	}

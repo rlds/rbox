@@ -9,6 +9,7 @@ package main
 
 import (
 	"encoding/json"
+
 	"github.com/rlds/rbox/base/def"
 	"github.com/rlds/rbox/base/util"
 )
@@ -74,7 +75,7 @@ func (b *boxInfo) TaskRes(indat def.RequestIn) (rt def.BoxOutPut) {
 //http模式访问执行
 func (b *boxInfo) httpMode(indat def.RequestIn) (rt def.BoxOutPut) {
 	urlpath := b.ModeInfo + "/call/" + b.Group + "/" + b.Name
-	retb, err := HttpPostJson(urlpath, util.ObjToStr(indat))
+	retb, err := HTTPPostJSON(urlpath, util.ObjToStr(indat))
 	if err == nil {
 		err = json.Unmarshal(retb, &rt)
 		if err != nil {
@@ -98,7 +99,7 @@ func (b *boxInfo) httpMode(indat def.RequestIn) (rt def.BoxOutPut) {
 func (b *boxInfo) httpModeTaskRes(indat def.RequestIn) (rt def.BoxOutPut) {
 	urlpath := b.ModeInfo + "/taskRes/" + b.Group + "/" + b.Name
 	//println(urlpath)
-	retb, err := HttpPostJson(urlpath, util.ObjToStr(indat))
+	retb, err := HTTPPostJSON(urlpath, util.ObjToStr(indat))
 	if err == nil {
 		err = json.Unmarshal(retb, &rt)
 		if err != nil {

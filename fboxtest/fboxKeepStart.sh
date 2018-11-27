@@ -11,7 +11,7 @@ while :
 do
 #  3秒检测一次
     sleep 3
-    RESULT=`ps -e|grep 'fbox'|sed -e "/grep/d"` 
+    RESULT=`pgrep -f 'fbox'` 
     if [ -z "$RESULT" ];then 
        # 启动进程 默认http模式启动 
        (./fbox -mode http >>err.dat &)

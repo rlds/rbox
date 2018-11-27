@@ -7,10 +7,10 @@
 //
 package main
 
-import(
+import (
 	"errors"
 )
 
 var (
-    GROUP_BOX_ERR  = errors.New("group or box error")
+	GROUP_BOX_ERR = errors.New("group or box error")
 )
