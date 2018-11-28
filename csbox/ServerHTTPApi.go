@@ -1,4 +1,4 @@
-// 
+//
 //  ServerHTTPApi.go
 //  rbox
 //
@@ -19,28 +19,28 @@ import (
 )
 
 const (
-	BoxOutPutCode_Ok    = "0"
-	BoxOutPutCallBox_Ok = "CallBox_Ok"
-	BoxOutPutRegBox_Ok  = "RegBox_Ok"
+	BoxOutPutCodeOk    = "0"
+	BoxOutPutCallBoxOk = "CallBox_Ok"
+	BoxOutPutRegBoxOk  = "RegBox_Ok"
 
-	CallBoxCodeInputErr_100  = "100"
-	CallBoxCodeInputErr_101  = "101"
-	CallBoxCodeInputErr_102  = "102"
-	CallBoxCodeInputErr_103  = "103"
-	CallBox_ResType_InputErr = "InputErr"
+	CallBoxCodeInputErr100  = "100"
+	CallBoxCodeInputErr101  = "101"
+	CallBoxCodeInputErr102  = "102"
+	CallBoxCodeInputErr103  = "103"
+	CallBox_ResTypeInputErr = "InputErr"
 
-	CallBoxCodeInputErr_104 = "104"
-	CallBoxCodeInputErr_105 = "105"
-	CallBoxResTypeCallErr   = "CallErr"
+	CallBoxCodeInputErr104 = "104"
+	CallBoxCodeInputErr105 = "105"
+	CallBoxResTypeCallErr  = "CallErr"
 
-	RegBoxCodeInputErr_106  = "106"
-	RegBoxCodeInputErr_107  = "107"
-	RegBoxCodeInputErr_108  = "108"
-	RegBoxCodeInputErr_109  = "109"
-	RegBox_ResType_InputErr = "RegboxErr"
+	RegBoxCodeInputErr106  = "106"
+	RegBoxCodeInputErr107  = "107"
+	RegBoxCodeInputErr108  = "108"
+	RegBoxCodeInputErr109  = "109"
+	RegBox_ResTypeInputErr = "RegboxErr"
 
-	CallBoxCodeBoxRetErr_110 = "110"
-	CallBoxResTypeBoxRetErr  = "BoxRetErr"
+	CallBoxCodeBoxRetErr110 = "110"
+	CallBoxResTypeBoxRetErr = "BoxRetErr"
 )
 
 var (
@@ -235,15 +235,15 @@ func regbox(w http.ResponseWriter, r *http.Request) {
 	var box def.BoxInfo
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil || len(body) < 10 {
-		bp.Type = RegBox_ResType_InputErr
-		bp.Code = RegBoxCodeInputErr_106
+		bp.Type = RegBox_ResTypeInputErr
+		bp.Code = RegBoxCodeInputErr106
 		bp.ReturnMsg = "RegInPutErr"
 		goto RegEnd
 	}
 	err = json.Unmarshal(body, &box)
 	if err != nil {
-		bp.Type = RegBox_ResType_InputErr
-		bp.Code = RegBoxCodeInputErr_107
+		bp.Type = RegBox_ResTypeInputErr
+		bp.Code = RegBoxCodeInputErr107
 		bp.ReturnMsg = err.Error()
 		goto RegEnd
 	}
@@ -254,17 +254,17 @@ func regbox(w http.ResponseWriter, r *http.Request) {
 		err = sysd.AddBox(box)
 		if err == nil {
 			//添加完成正常返回
-			bp.Type = BoxOutPutRegBox_Ok
-			bp.Code = BoxOutPutCode_Ok
+			bp.Type = BoxOutPutRegBoxOk
+			bp.Code = BoxOutPutCodeOk
 			bp.ReturnMsg = ""
 		} else {
-			bp.Type = RegBox_ResType_InputErr
-			bp.Code = RegBoxCodeInputErr_109
+			bp.Type = RegBox_ResTypeInputErr
+			bp.Code = RegBoxCodeInputErr109
 			bp.ReturnMsg = err.Error()
 		}
 	} else {
-		bp.Type = RegBox_ResType_InputErr
-		bp.Code = RegBoxCodeInputErr_108
+		bp.Type = RegBox_ResTypeInputErr
+		bp.Code = RegBoxCodeInputErr108
 		bp.ReturnMsg = "BoxChkErr"
 		goto RegEnd
 	}
@@ -294,16 +294,16 @@ func updategroup(w http.ResponseWriter, r *http.Request) {
 
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil || len(body) < 10 {
-		bp.Type = RegBox_ResType_InputErr
-		bp.Code = RegBoxCodeInputErr_106
+		bp.Type = RegBox_ResTypeInputErr
+		bp.Code = RegBoxCodeInputErr106
 		bp.ReturnMsg = "RegInPutErr"
 		goto UpdateEnd
 	}
 
 	err = json.Unmarshal(body, &bgi)
 	if err != nil {
-		bp.Type = RegBox_ResType_InputErr
-		bp.Code = RegBoxCodeInputErr_107
+		bp.Type = RegBox_ResTypeInputErr
+		bp.Code = RegBoxCodeInputErr107
 		bp.ReturnMsg = err.Error()
 		goto UpdateEnd
 	}
@@ -311,12 +311,12 @@ func updategroup(w http.ResponseWriter, r *http.Request) {
 	//信息更新成功
 	err = sysd.AddBoxGroup(bgi)
 	if err == nil {
-		bp.Type = BoxOutPutRegBox_Ok
-		bp.Code = BoxOutPutCode_Ok
+		bp.Type = BoxOutPutRegBoxOk
+		bp.Code = BoxOutPutCodeOk
 		bp.ReturnMsg = ""
 	} else {
-		bp.Type = RegBox_ResType_InputErr
-		bp.Code = RegBoxCodeInputErr_106
+		bp.Type = RegBox_ResTypeInputErr
+		bp.Code = RegBoxCodeInputErr106
 		bp.ReturnMsg = err.Error()
 	}
 
@@ -354,8 +354,8 @@ func callbox(w http.ResponseWriter, r *http.Request) {
 	bp.TaskId = sysd.tp.GetTid()
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		bp.Type = CallBox_ResType_InputErr
-		bp.Code = CallBoxCodeInputErr_100
+		bp.Type = CallBox_ResTypeInputErr
+		bp.Code = CallBoxCodeInputErr100
 		bp.ReturnMsg = err.Error()
 		goto CALLEND
 	}
@@ -363,8 +363,8 @@ func callbox(w http.ResponseWriter, r *http.Request) {
 	if len(body) > 5 {
 		err = json.Unmarshal(body, &params)
 		if err != nil {
-			bp.Type = CallBox_ResType_InputErr
-			bp.Code = CallBoxCodeInputErr_101
+			bp.Type = CallBox_ResTypeInputErr
+			bp.Code = CallBoxCodeInputErr101
 			bp.ReturnMsg = err.Error()
 			goto CALLEND
 		}
@@ -389,8 +389,8 @@ func callbox(w http.ResponseWriter, r *http.Request) {
 		group, boxnm = arr[2], arr[3]
 		box, err = sysd.GetCallBox(group, boxnm)
 		if err != nil {
-			bp.Type = CallBox_ResType_InputErr
-			bp.Code = CallBoxCodeInputErr_102
+			bp.Type = CallBox_ResTypeInputErr
+			bp.Code = CallBoxCodeInputErr102
 			bp.ReturnMsg = err.Error()
 			goto CALLEND
 		}
@@ -403,8 +403,8 @@ func callbox(w http.ResponseWriter, r *http.Request) {
 		//执行
 		bp = box.DoWork(callin)
 	} else {
-		bp.Type = CallBox_ResType_InputErr
-		bp.Code = CallBoxCodeInputErr_105
+		bp.Type = CallBox_ResTypeInputErr
+		bp.Code = CallBoxCodeInputErr105
 		bp.ReturnMsg = "input err:box name null"
 	}
 	//------------------------------
@@ -430,8 +430,8 @@ func taskRes(w http.ResponseWriter, r *http.Request) {
 	//bp.TaskId = sysd.tp.GetTid()
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		bp.Type = CallBox_ResType_InputErr
-		bp.Code = CallBoxCodeInputErr_100
+		bp.Type = CallBox_ResTypeInputErr
+		bp.Code = CallBoxCodeInputErr100
 		bp.ReturnMsg = err.Error()
 		goto CALLEND
 	}
@@ -439,8 +439,8 @@ func taskRes(w http.ResponseWriter, r *http.Request) {
 	if len(body) > 5 {
 		err = json.Unmarshal(body, &params)
 		if err != nil {
-			bp.Type = CallBox_ResType_InputErr
-			bp.Code = CallBoxCodeInputErr_101
+			bp.Type = CallBox_ResTypeInputErr
+			bp.Code = CallBoxCodeInputErr101
 			bp.ReturnMsg = err.Error()
 			goto CALLEND
 		}
@@ -462,8 +462,8 @@ func taskRes(w http.ResponseWriter, r *http.Request) {
 		group, boxnm = arr[2], arr[3]
 		box, err = sysd.GetCallBox(group, boxnm)
 		if err != nil {
-			bp.Type = CallBox_ResType_InputErr
-			bp.Code = CallBoxCodeInputErr_102
+			bp.Type = CallBox_ResTypeInputErr
+			bp.Code = CallBoxCodeInputErr102
 			bp.ReturnMsg = err.Error()
 			goto CALLEND
 		}
@@ -476,8 +476,8 @@ func taskRes(w http.ResponseWriter, r *http.Request) {
 		//执行
 		bp = box.TaskRes(callin)
 	} else {
-		bp.Type = CallBox_ResType_InputErr
-		bp.Code = CallBoxCodeInputErr_105
+		bp.Type = CallBox_ResTypeInputErr
+		bp.Code = CallBoxCodeInputErr105
 		bp.ReturnMsg = "input err:box name null"
 	}
 	//------------------------------

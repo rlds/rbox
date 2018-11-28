@@ -31,13 +31,13 @@ func (b *boxInfo) DoWork(indat def.RequestIn) (rt def.BoxOutPut) {
 		default:
 			{
 				rt.Type = CallBoxResTypeCallErr
-				rt.Code = CallBoxCodeInputErr_103
+				rt.Code = CallBoxCodeInputErr103
 				rt.ReturnMsg = "connType err"
 			}
 		}
 	} else {
 		rt.Type = CallBoxResTypeCallErr
-		rt.Code = CallBoxCodeInputErr_104
+		rt.Code = CallBoxCodeInputErr104
 		rt.ReturnMsg = "not alive"
 	}
 	return
@@ -60,13 +60,13 @@ func (b *boxInfo) TaskRes(indat def.RequestIn) (rt def.BoxOutPut) {
 		default:
 			{
 				rt.Type = CallBoxResTypeCallErr
-				rt.Code = CallBoxCodeInputErr_103
+				rt.Code = CallBoxCodeInputErr103
 				rt.ReturnMsg = "connType err"
 			}
 		}
 	} else {
 		rt.Type = CallBoxResTypeCallErr
-		rt.Code = CallBoxCodeInputErr_104
+		rt.Code = CallBoxCodeInputErr104
 		rt.ReturnMsg = "not alive"
 	}
 	return
@@ -80,7 +80,7 @@ func (b *boxInfo) httpMode(indat def.RequestIn) (rt def.BoxOutPut) {
 		err = json.Unmarshal(retb, &rt)
 		if err != nil {
 			rt.Type = CallBoxResTypeBoxRetErr
-			rt.Code = CallBoxCodeBoxRetErr_110
+			rt.Code = CallBoxCodeBoxRetErr110
 			rt.ReturnMsg = "BoxRetError"
 		}
 
@@ -89,7 +89,7 @@ func (b *boxInfo) httpMode(indat def.RequestIn) (rt def.BoxOutPut) {
 		//rt.Code      = BoxOutPut_Code_Ok
 	} else {
 		rt.Type = CallBoxResTypeBoxRetErr
-		rt.Code = CallBoxCodeBoxRetErr_110
+		rt.Code = CallBoxCodeBoxRetErr110
 		rt.ReturnMsg = "BoxRetError"
 	}
 	return
@@ -104,7 +104,7 @@ func (b *boxInfo) httpModeTaskRes(indat def.RequestIn) (rt def.BoxOutPut) {
 		err = json.Unmarshal(retb, &rt)
 		if err != nil {
 			rt.Type = CallBoxResTypeBoxRetErr
-			rt.Code = CallBoxCodeBoxRetErr_110
+			rt.Code = CallBoxCodeBoxRetErr110
 			rt.ReturnMsg = "BoxRetError"
 		}
 
@@ -114,7 +114,7 @@ func (b *boxInfo) httpModeTaskRes(indat def.RequestIn) (rt def.BoxOutPut) {
 
 	} else {
 		rt.Type = CallBoxResTypeBoxRetErr
-		rt.Code = CallBoxCodeBoxRetErr_110
+		rt.Code = CallBoxCodeBoxRetErr110
 		rt.ReturnMsg = "BoxRetError"
 	}
 	return

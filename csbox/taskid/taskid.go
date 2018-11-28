@@ -9,14 +9,13 @@ package taskid
 //
 
 import (
-	"rlds/utils/hex"
 	"sync"
 	"time"
 )
 
 // TaskID wid生成器 生成字符串id
 type TaskID struct {
-	mcd     *hex.Hex64_w
+	mcd     *Hex64_w
 	bPidpre []byte
 	lasth   int //小时时间值
 	mu      sync.RWMutex
@@ -25,7 +24,7 @@ type TaskID struct {
 // NewTaskID 用于生成任务id
 func NewTaskID() (w *TaskID) {
 	w = new(TaskID)
-	w.mcd = new(hex.Hex64_w)
+	w.mcd = new(Hex64_w)
 	w.mcd.StrInit(6, []byte("000000"), false)
 	w.bPidpre = make([]byte, 8)
 	w.bPidpre[0] = 'w'
@@ -44,9 +43,9 @@ func (w *TaskID) GetTid() string {
 // 进行时间的处理
 func (w *TaskID) sysTimer() {
 	y, m, d := time.Now().Date() //天数值初始化
-	w.bPidpre[2] = hex.IntToNbyte(y - 2000)
-	w.bPidpre[3] = hex.IntToNbyte(int(m))
-	w.bPidpre[4] = hex.IntToNbyte(d)
+	w.bPidpre[2] = IntToNbyte(y - 2000)
+	w.bPidpre[3] = IntToNbyte(int(m))
+	w.bPidpre[4] = IntToNbyte(d)
 	for {
 		t := time.Now()
 		h, m, cs := t.Clock()
@@ -55,15 +54,15 @@ func (w *TaskID) sysTimer() {
 			w.lasth = h
 			if h == 0 { //天的数据清0
 				y, m, d := t.Date()
-				w.bPidpre[2] = hex.IntToNbyte(y - 2000)
-				w.bPidpre[3] = hex.IntToNbyte(int(m))
-				w.bPidpre[4] = hex.IntToNbyte(d)
+				w.bPidpre[2] = IntToNbyte(y - 2000)
+				w.bPidpre[3] = IntToNbyte(int(m))
+				w.bPidpre[4] = IntToNbyte(d)
 			}
 		}
 		//时分秒
-		w.bPidpre[5] = hex.IntToNbyte(h)
-		w.bPidpre[6] = hex.IntToNbyte(m)
-		w.bPidpre[7] = hex.IntToNbyte(cs)
+		w.bPidpre[5] = IntToNbyte(h)
+		w.bPidpre[6] = IntToNbyte(m)
+		w.bPidpre[7] = IntToNbyte(cs)
 		w.mu.RUnlock() //解锁
 		time.Sleep(time.Second)
 	}
