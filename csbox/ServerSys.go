@@ -1,4 +1,4 @@
-// 
+//
 //  sys.go
 //  rbox
 //
@@ -292,7 +292,7 @@ func (s *sysdata) checkeAlive() {
 
 func pingBox(urlstr string) bool {
 	data, err := base.RegBoxPost(urlstr, "")
-	Log(urlstr, "res:", string(data))
+	//Log(urlstr, "res:", string(data))
 	if err == nil && string(data) == "ok" {
 		return true
 	}
