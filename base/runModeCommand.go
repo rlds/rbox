@@ -7,11 +7,15 @@
 //
 package base
 
+import (
+	. "github.com/rlds/rbox/base/def"
+)
+
 /*
 	命令行模式的执行
 */
 type commandModeWorker struct {
-	input map[string]string
+	input InputData
 }
 
 func (c *commandModeWorker) Register() {

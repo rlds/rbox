@@ -48,7 +48,7 @@ const (
 	C_TaskInfoStoreTimeStep = 60 * 5 //5分钟
 )
 
-type TFunc func(map[string]string) (string, string)
+type TFunc func(InputData) (string, interface{})
 
 var taskFunc TFunc
 
@@ -57,7 +57,7 @@ func RegisterFunc(f TFunc) {
 }
 
 //执行任务
-func (l *taskResData) Run(in map[string]string) {
+func (l *taskResData) Run(in InputData) {
 	/*
 	 任务开始的一些设置
 	*/
@@ -71,7 +71,7 @@ func (l *taskResData) Run(in map[string]string) {
 	*/
 	base.Log(l.TaskId, " task Start:", in)
 	//任务执行完成的处理
-	l.Data, l.Type = taskFunc(in)
+	l.Type, l.Data = taskFunc(in)
 	l.IsSync = true
 	l.Status = "COMPLETE"
 	l.endTime = time.Now().Unix()
@@ -104,7 +104,7 @@ func (g *fboxBox) Init() bool {
         数据的最终获得结果由 Output() 给出
         需要主动记录任务id及最终结果以备输出
 */
-func (g *fboxBox) DoWork(taskid string, input map[string]string) (err error) {
+func (g *fboxBox) DoWork(taskid string, input InputData) (err error) {
 	/*
 	 这里可以先执行然后存储结果
 	 也可以在此记录输入在其他步骤中执行
@@ -161,9 +161,8 @@ func (g *fboxBox) Output(taskid string) (m BoxOutPut) {
 		m.Status = tidin.Status
 		m.Type = tidin.Type
 		if tidin.Data != nil {
-			resDat := tidin.Data.(string)
 			if g.isCommandMode {
-				m.Data = resDat
+				m.Data = tidin.Data
 			} else {
 				/*
 				   其他模式情况下当数据量过大或涉及到外部计算量过大时的处理
@@ -172,6 +171,10 @@ func (g *fboxBox) Output(taskid string) (m BoxOutPut) {
 				switch m.Type {
 				case "markdown":
 					{
+						resDat := ""
+						if tidin.Data != nil {
+							resDat = tidin.Data.(string)
+						}
 						//m.Data = resDat
 						m.Type = "html"
 						//base.Log(taskid,"markdown chg")
@@ -181,18 +184,20 @@ func (g *fboxBox) Output(taskid string) (m BoxOutPut) {
 					}
 				case "json":
 					{ //json格式的格式化
-						m.Type = "html"
-						m.Data = resDat
+						m.Type = "json"
+						m.Data = tidin.Data
 					}
 				case "html", "HTML":
 					{
 						m.Type = "html"
-						m.Data = resDat
+						if tidin.Data != nil {
+							m.Data = tidin.Data.(string)
+						}
 					}
 				default:
 					{
 						m.Type = "html"
-						m.Data = resDat
+						m.Data = tidin.Data
 					}
 				}
 				//-----------------------------------------------------

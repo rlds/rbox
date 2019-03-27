@@ -1,4 +1,4 @@
-//  
+//
 //  fboxMain.go
 //  main
 //
@@ -8,11 +8,12 @@
 //
 package main
 
-import(
+import (
+	"github.com/rlds/rbox/base/def"
 	"github.com/rlds/rbox/fbox"
 )
 
-func main(){
+func main() {
 	//函数注册
 	fbox.RegisterFunc(worker)
 	//重设初始配置信息
@@ -20,23 +21,23 @@ func main(){
 	//开始执行
 	fbox.Run()
 }
+
 /*
     输入是如下结构的map
     in = {"city":"杭州"}
-	返回结果为文本 rets 
+	返回结果为文本 rets
 	格式可以为:restype= markdown|json|html|imgstring=base64(bin(img))
 	并指明结果的文本类型
 */
 // 需要执行的函数体
-func worker(in map[string]string)(rets string,restype string){
+func worker(in def.InputData) (restype string, rets interface{}) {
 	//
 	// todo :
 	// 在下面添加功能代码
 	// 这里是主体功能的入口和结果返回的地方
-	// 
-    rets = checkTianqi(in["city"])
+	//
+	rets = checkTianqi(in.Data["city"].(string))
 	restype = "json"
 	// restype = "markdown|json|html|imgstring"
-	return 
+	return
 }
-
