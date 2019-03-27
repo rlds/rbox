@@ -11,9 +11,9 @@ import (
 	"sort"
 	"time"
 
-	"./taskid"
 	"github.com/rlds/rbox/base"
 	"github.com/rlds/rbox/base/def"
+	"github.com/rlds/rbox/csbox/taskid"
 )
 
 /*
@@ -209,7 +209,8 @@ func (s *sysdata) AddBox(bx def.BoxInfo) (err error) {
 	bif.Group = bx.Group
 	bif.Name = bx.Name
 	bif.ShowName = bx.ShowName
-	bif.Params = bx.Params
+	//bif.Params = bx.Params
+	bif.SubBox = bx.SubBox
 	bif.Author = bx.Author
 	bif.Description = bx.Description
 	bif.Mode = bx.Mode

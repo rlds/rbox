@@ -224,7 +224,12 @@ bx {
     margin-top: 4px;
 }
 
-.BoxInputParam>span {
+.paramLine {
+    margin-left: 2px;
+    margin-top: 4px;
+}
+
+.paramLine>span {
     width: 90px;
     padding: 4px 15px;
     font-size: 14px;
@@ -238,8 +243,9 @@ bx {
     border-right: 1px solid #ddd;
 }
 
-.BoxInputParam>input {
-    /*width: 180px;*/
+
+.paramLine>input {
+    width: 70%;
     border-radius: 6px;
     height: 30px;
     padding: 4px 15px;
@@ -251,6 +257,30 @@ bx {
     border-left: white;
     border-bottom-left-radius: unset;
     border-top-left-radius: unset;
+}
+
+.subBoxSel{
+    margin-top: 4px;
+}
+
+.subBoxSel >label {
+    width: 120px;
+    height: 30px;
+    font-size: 14px;
+    text-align:right;
+}
+
+.subBoxSel >select{
+    width: 35%;
+    border-radius: 6px;
+    height: 30px;
+    padding: 4px 15px;
+    font-size: 14px;
+    border-top: 1px solid #ddd;
+    border-radius: 6px;
+    border-bottom: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    border-left:1px solid #ddd;
 }
 
 .BoxInputSubmit {
@@ -367,4 +397,40 @@ user agent stylesheet table {
 
 .code tm {
     background-color: #eef;
+}
+
+.subHide {
+    display: none;
+}
+
+.subShow {
+    display: block;
+}
+
+.BoxParam {
+    width: 80%;
+}
+
+.paramLine {
+    width: 80%;
+    height: 40px;
+}
+
+.InfoTitle {
+    width: 15%;
+    text-align: right;
+}
+
+.subboxDes {
+    
+}
+
+.subboxDes div {
+    text-align: left;
+    margin-left: 30px;
+    color: blue;
+}
+
+.subBoxSel label {
+    margin-left: 40px;
 }

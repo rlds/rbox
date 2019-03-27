@@ -97,7 +97,7 @@ RECONNECT:
 		time.Sleep(time.Second)
 		if reTimes < requestRetryTimes {
 			reTimes++
-			Log("尝试第[", reTimes, "] 次重新连接")
+			Log("尝试第[", reTimes, "] 次重新连接 url:", urlstr)
 			goto RECONNECT
 		}
 	}

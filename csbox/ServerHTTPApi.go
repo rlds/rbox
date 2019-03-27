@@ -117,6 +117,10 @@ func pages(w http.ResponseWriter, r *http.Request) {
 			{ //设置group的信息
 				updategroup(w, r)
 			}
+		case "ok.htm", "ping.htm", "ok.html", "ping.html":
+			{
+				w.Write([]byte("ok"))
+			}
 		default:
 			{
 				arr := strings.Split(r.URL.Path, ".")
@@ -213,7 +217,9 @@ func pagetmldo(gbox string, w http.ResponseWriter, r *http.Request) {
 		if len(box) > 0 && len(box) < 30 {
 			box, err := sysd.GetCallBox(group, box)
 			if err == nil {
-				tmplmap["Boxparam"] = box.Params
+				tmplmap["Hsb"] = len(box.SubBox) > 1
+				tmplmap["SubBoxs"] = box.SubBox
+				//tmplmap["Boxparam"] = box.Params
 				tmplmap["Boxinfo"] = box
 			}
 		}
@@ -350,7 +356,9 @@ func callbox(w http.ResponseWriter, r *http.Request) {
 	group, boxnm := "", ""
 	var box *boxInfo
 	var arr []string
-	params := make(map[string]string)
+	var indat def.InputData
+	indat.Data = make(map[string]interface{})
+	//params := make(map[string]string)
 	bp.TaskId = sysd.tp.GetTid()
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
@@ -361,7 +369,7 @@ func callbox(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if len(body) > 5 {
-		err = json.Unmarshal(body, &params)
+		err = json.Unmarshal(body, &indat)
 		if err != nil {
 			bp.Type = CallBox_ResTypeInputErr
 			bp.Code = CallBoxCodeInputErr101
@@ -371,17 +379,20 @@ func callbox(w http.ResponseWriter, r *http.Request) {
 	}
 
 	r.ParseForm()
+	if indat.Data == nil {
+		indat.Data = make(map[string]interface{})
+	}
 	for k, v := range r.Form {
 		if len(v) > 1 {
-			params[k] = util.ObjToStr(v)
+			indat.Data[k] = util.ObjToStr(v)
 		} else {
-			params[k] = v[0]
+			indat.Data[k] = v
 		}
 	}
 	Log("header:", util.ObjToStr(r.Header))
 	//   params["xRealIP"]       = r.Header.Get("X-Real-Ip")
 	//   params["xForwardedFor"] = r.Header.Get("X-Forwarded-For")
-	params["remoteAddr"] = r.RemoteAddr
+	indat.Data["remoteAddr"] = r.RemoteAddr
 	//------------------------------
 	arr = strings.Split(r.URL.Path, "/")
 	if len(arr) > 3 {
@@ -398,7 +409,7 @@ func callbox(w http.ResponseWriter, r *http.Request) {
 		var callin def.RequestIn
 		callin.TaskId = bp.TaskId
 		callin.From = serverInfo
-		callin.Input = params
+		callin.Input = indat
 		callin.Call = boxnm
 		//执行
 		bp = box.DoWork(callin)
@@ -426,7 +437,8 @@ func taskRes(w http.ResponseWriter, r *http.Request) {
 	group, boxnm := "", ""
 	var box *boxInfo
 	var arr []string
-	params := make(map[string]string)
+	var indat def.InputData
+	//params := make(map[string]string)
 	//bp.TaskId = sysd.tp.GetTid()
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
@@ -437,7 +449,7 @@ func taskRes(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if len(body) > 5 {
-		err = json.Unmarshal(body, &params)
+		err = json.Unmarshal(body, &indat)
 		if err != nil {
 			bp.Type = CallBox_ResTypeInputErr
 			bp.Code = CallBoxCodeInputErr101
@@ -447,11 +459,14 @@ func taskRes(w http.ResponseWriter, r *http.Request) {
 	}
 
 	r.ParseForm()
+	if indat.Data == nil {
+		indat.Data = make(map[string]interface{})
+	}
 	for k, v := range r.Form {
 		if len(v) > 1 {
-			params[k] = util.ObjToStr(v)
+			indat.Data[k] = util.ObjToStr(v)
 		} else {
-			params[k] = v[0]
+			indat.Data[k] = v
 		}
 	}
 
@@ -471,7 +486,7 @@ func taskRes(w http.ResponseWriter, r *http.Request) {
 		var callin def.RequestIn
 		callin.TaskId = r.FormValue("TaskId") //bp.TaskId
 		callin.From = serverInfo
-		callin.Input = params
+		callin.Input = indat
 		callin.Call = boxnm
 		//执行
 		bp = box.TaskRes(callin)

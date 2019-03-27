@@ -1,13 +1,32 @@
 <!-- 选中的具体工具可用并且有附加参数时展示 -->
 {{define "boxparam"}}
-<!--{{.}}-->
+<!-- -->
 <div class="BoxForm">
-	{{range .}}
-	<!--{{.}}-->
-    <div class="row BoxInputParam">
-		<span class="col-md-1 add-on">{{.Label}}</span>
-        <input class="col-md-4 span2" id="boxInput" name="{{.Name}}" type="{{.Type}}" placeholder="{{.Hint}}" value="{{.Value}}">
-            </div>
+    {{if .Hsb}}
+    <div class="subBoxSel" >
+       <label>请选择操作：</label>
+       <select id="boxSel">
+	    {{range .SubBoxs}}<option value="{{.SubName}}">{{.Label}}</option>
+	    {{end}}
+       </select>
+    </div>
+    {{end}}
+    {{range .SubBoxs}}
+    <div id="subbox{{.SubName}}" class="subHide BoxParam" dtype="sboxparam">
+    <div class="row InfoLine" >
+        {{range .Params}}
+        <div class="paramLine">
+		<span class="col-md-1 InfoTitle">{{.Label}}</span>
+        <input class="col-md-4 InfoTxt" id="boxInput" name="{{.Name}}" type="{{.Type}}" placeholder="{{.Hint}}" value="{{.Value}}" valuetype="{{.ValueType}}">
+        </div>
+        {{end}}
+    </div>
+    <div class="subboxDes">
+    <div>
+    {{.Des}}
+    </div>
+    </div>
+    </div>
 	{{end}}
 	<!-- 按钮部分 -->
     <div class="BoxInputSubmit">
@@ -15,3 +34,4 @@
     </div>
 </div>
 {{end}}
+
