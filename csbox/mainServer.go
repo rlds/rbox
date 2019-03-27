@@ -7,36 +7,33 @@
 //
 package main
 
-import(
-    "net/http"
-	"time"
+import (
 	"flag"
+	"net/http"
+	"time"
+
 	"github.com/rlds/rlog"
 )
-
-func init(){
-	//Log("init")
-}
 
 /*
    webserver展示层
 */
-func main(){
+func main() {
 	httpAddr := ""
 	logdir := ""
-	maxLogFileByte := uint64(1024 *1024 * 100)
-	flag.StringVar(&httpAddr,"host",":9888","启动ShowServer的地址")
-	flag.StringVar(&logdir,"log","../log","日志输出文件夹")
-	flag.StringVar(&jsCssHtmlTmplFileDirPath,"static","../static","静态模版文件和js、css所在文件夹路径")
+	maxLogFileByte := uint64(1024 * 1024 * 100)
+	flag.StringVar(&httpAddr, "host", ":9888", "启动ShowServer的地址")
+	flag.StringVar(&logdir, "log", "../log", "日志输出文件夹")
+	flag.StringVar(&jsCSSHtmlTmplFileDirPath, "static", "../static", "静态模版文件和js、css所在文件夹路径")
 	flag.Parse()
-	rlog.LogInit(3,logdir,maxLogFileByte,1)
-	Log("jsCssHtmlTmplFileDirPath :",jsCssHtmlTmplFileDirPath)
+	rlog.LogInit(3, logdir, maxLogFileByte, 1)
+	Log("jsCSSHtmlTmplFileDirPath :", jsCSSHtmlTmplFileDirPath)
 	sysd.Init()
 	webServerStart(httpAddr)
 }
 
-func webServerStart(httpAddr string){
-	http.HandleFunc("/",pages)
+func webServerStart(httpAddr string) {
+	http.HandleFunc("/", pages)
 	svr := http.Server{
 		Addr:           httpAddr,
 		ReadTimeout:    30 * time.Second,
@@ -46,11 +43,11 @@ func webServerStart(httpAddr string){
 	}
 	svr.SetKeepAlivesEnabled(true)
 	if err := svr.ListenAndServe(); nil != err {
-		Log("ListenAndServe error:%s", err.Error())
+		Log("ListenAndServe error:", err.Error())
 	}
 }
 
-func Log(arg...interface{}){
-	//fmt.Println(arg...)
-	rlog.V(1).Info(arg)
+// Log 日志输出
+func Log(arg ...interface{}) {
+	rlog.V(1).Info(arg...)
 }

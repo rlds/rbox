@@ -18,6 +18,7 @@ import (
 	"github.com/rlds/rbox/base/util"
 
 	"gopkg.in/yaml.v2"
+	"strings"
 )
 /*
    功能：自动生成初始代码
@@ -58,6 +59,7 @@ const (
 	boxConfigTmplFileName      = "Config.go"
 	boxKeepstartShTmplFileName = "KeepStart.sh"
 	boxWorkerTmplFileName      = "RboxWorker.go"
+	boxDockerTmplFileName      = "Dockerfile"
 )
 
 // 生成文件
@@ -66,6 +68,15 @@ func createDo(outfiledirpath string, cfg toolConfig) {
 	tlcfg := make(map[string]interface{})
 	tlcfg["BoxConf"] = cfg.BuildBoxConf
 	tlcfg["Time"] = time.Now().Format("2006-01-02 15:04:05")
+
+    hostarr := strings.Split(cfg.BuildBoxConf.SelfHttpServerHost,":")
+	port := ""
+	if len(hostarr) == 2 {
+        port = hostarr[1]
+	}else{
+		port = "80"
+	}
+    tlcfg["EXPOSE"] = port
 
 	tmplDirPath := cfg.TmplFileDirPath
 
@@ -88,6 +99,10 @@ func createDo(outfiledirpath string, cfg toolConfig) {
 	// makefile
 	outfilename = outfiledirpath + "/" + boxMakefileTmplFileName
 	createBoxFile(tmplDirPath+"/"+boxMakefileTmplFileName, outfilename, tlcfg)
+
+	// Dockerfile
+	outfilename = outfiledirpath + "/" + boxDockerTmplFileName
+	createBoxFile(tmplDirPath+"/"+boxDockerTmplFileName, outfilename, tlcfg)
 }
 
 func createBoxFile(tmplfilename, outfile string, tlcfg map[string]interface{}) {

@@ -11,7 +11,7 @@ while :
 do
 #  3秒检测一次
     sleep 3
-    RESULT=`ps -e|grep 'tianqi'|sed -e "/grep/d"` 
+    RESULT=`pgrep -f 'tianqi'` 
     if [ -z "$RESULT" ];then 
        # 启动进程 默认http模式启动 
        (./tianqi -mode http >>err.dat &)
