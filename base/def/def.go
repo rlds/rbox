@@ -7,6 +7,8 @@
 //
 package def
 
+import "strings"
+
 /*
    基础的结构定义
 */
@@ -14,6 +16,7 @@ package def
 type (
 	//配置信息的定义结构
 	BoxInfo struct {
+		RegAddr  string //注册时获得的地址信息
 		Group    string //工具分组代码
 		Name     string //工具名称
 		ShowName string //工具展示名称
@@ -87,4 +90,20 @@ func (b *BoxInfo) InfoOk() bool {
 		return false
 	}
 	return true
+}
+
+// SetModeInfo 看设置的端口是否正确
+func (b *BoxInfo) SetModeInfo(host string) {
+	b.RegAddr = host
+	if b.Mode == "http" {
+		arr := strings.Split(b.ModeInfo, ":")
+		iarr := strings.Split(host, ":")
+		if len(arr) > 1 {
+			if len(arr[0]) < 5 {
+				b.ModeInfo = iarr[0] + ":" + arr[1]
+			}
+		} else {
+			b.ModeInfo = iarr[0] + ":8080"
+		}
+	}
 }

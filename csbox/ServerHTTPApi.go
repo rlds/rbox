@@ -253,7 +253,7 @@ func regbox(w http.ResponseWriter, r *http.Request) {
 		bp.ReturnMsg = err.Error()
 		goto RegEnd
 	}
-
+	box.SetModeInfo(r.RemoteAddr)
 	//box 初步检测信息正确性
 	if box.InfoOk() {
 		//添加box
