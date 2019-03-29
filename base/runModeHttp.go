@@ -48,6 +48,7 @@ func (h *httpModeWorker) Run() {
 	http.HandleFunc(boxUrlPath, h.boxServ)
 	http.HandleFunc("/call"+boxUrlPath, h.boxServ)
 	http.HandleFunc("/taskRes"+boxUrlPath, h.boxTaskRes)
+	http.HandleFunc("/ok.htm", h.ping)
 	http.HandleFunc("/ping", h.ping)
 	http.HandleFunc("/about", h.about)
 	svr := http.Server{
