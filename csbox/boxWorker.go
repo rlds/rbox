@@ -18,6 +18,7 @@ import (
    开始执行任务
 */
 func (b *boxInfo) DoWork(indat def.RequestIn) (rt def.BoxOutPut) {
+	indat.Input.IsSync = b.IsSync
 	if b.isAlive {
 		switch b.connType {
 		case "http":
@@ -47,6 +48,7 @@ func (b *boxInfo) DoWork(indat def.RequestIn) (rt def.BoxOutPut) {
  开始执行任务
 */
 func (b *boxInfo) TaskRes(indat def.RequestIn) (rt def.BoxOutPut) {
+	indat.Input.IsSync = b.IsSync
 	if b.isAlive {
 		switch b.connType {
 		case "http":

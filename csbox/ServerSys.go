@@ -282,7 +282,7 @@ func (s *sysdata) checkeAlive() {
 				if v.connType == "http" {
 					v.isAlive = pingBox(v.ModeInfo + "/ping")
 					if !v.isAlive {
-						Log(v.Name, " 心跳检测失效，将不可用")
+						Log(v.Name, " 心跳检测失效，将不可用", v.ModeInfo)
 					}
 				}
 			}

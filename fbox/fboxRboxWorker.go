@@ -31,6 +31,7 @@ type fboxBox struct {
 	*/
 	taskIdInfoMap         sync.Map // 任务信息结果记录
 	modeName              string   // 任务执行模式
+	isSync                bool     // 是否同步模式
 	isCommandMode         bool     // 是否是命令行模式(只执行一次一个任务)
 	cleanTaskTimeStep     int64    // 清理任务记录信息的时间间隔 单位秒
 	taskInfoStoreTimeStep int64    // 任务信息存放最低多久时间 单位秒
@@ -72,7 +73,7 @@ func (l *taskResData) Run(in InputData) {
 	base.Log(l.TaskId, " task Start:", in)
 	//任务执行完成的处理
 	l.Type, l.Data = taskFunc(in)
-	l.IsSync = true
+	l.IsSync = in.IsSync
 	l.Status = "COMPLETE"
 	l.endTime = time.Now().Unix()
 	base.Log(in, " ret:", l.Type)
@@ -113,15 +114,16 @@ func (g *fboxBox) DoWork(taskid string, input InputData) (err error) {
 	_, ok := g.taskIdInfoMap.Load(taskid)
 	if !ok { //
 		tskdo := new(taskResData)
-
 		//任务开始的一些设置处理 异步执行的任务需要关注
-		tskdo.Data = "#   start"
 		g.taskIdInfoMap.Store(taskid, tskdo)
-		if g.isCommandMode {
+		if input.IsSync || g.isCommandMode {
 			tskdo.Run(input)
 		} else {
+			tskdo.Data = "# start"
+			tskdo.Status = "Start"
 			go tskdo.Run(input)
 		}
+
 	}
 	return
 }

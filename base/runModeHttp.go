@@ -136,3 +136,15 @@ func (h *httpModeWorker) ping(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte("ok"))
 }
+
+/*
+var cltMap map[string]*http.Client
+
+func HttpModeCallBox(group, boxname string, indata InputData) (rtype string, data interface{}) {
+	key := group + boxname
+	if cltMap == nil {
+		cltMap = make(map[string]*http.Client)
+	}
+
+}
+*/

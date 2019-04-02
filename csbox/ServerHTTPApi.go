@@ -243,6 +243,7 @@ func regbox(w http.ResponseWriter, r *http.Request) {
 	if err != nil || len(body) < 10 {
 		bp.Type = RegBox_ResTypeInputErr
 		bp.Code = RegBoxCodeInputErr106
+		bp.Status = "COMPLETE"
 		bp.ReturnMsg = "RegInPutErr"
 		goto RegEnd
 	}
@@ -250,6 +251,7 @@ func regbox(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		bp.Type = RegBox_ResTypeInputErr
 		bp.Code = RegBoxCodeInputErr107
+		bp.Status = "COMPLETE"
 		bp.ReturnMsg = err.Error()
 		goto RegEnd
 	}
@@ -266,11 +268,13 @@ func regbox(w http.ResponseWriter, r *http.Request) {
 		} else {
 			bp.Type = RegBox_ResTypeInputErr
 			bp.Code = RegBoxCodeInputErr109
+			bp.Status = "COMPLETE"
 			bp.ReturnMsg = err.Error()
 		}
 	} else {
 		bp.Type = RegBox_ResTypeInputErr
 		bp.Code = RegBoxCodeInputErr108
+		bp.Status = "COMPLETE"
 		bp.ReturnMsg = "BoxChkErr"
 		goto RegEnd
 	}
@@ -365,6 +369,7 @@ func callbox(w http.ResponseWriter, r *http.Request) {
 		bp.Type = CallBox_ResTypeInputErr
 		bp.Code = CallBoxCodeInputErr100
 		bp.ReturnMsg = err.Error()
+		bp.Status = "COMPLETE"
 		goto CALLEND
 	}
 
@@ -374,6 +379,7 @@ func callbox(w http.ResponseWriter, r *http.Request) {
 			bp.Type = CallBox_ResTypeInputErr
 			bp.Code = CallBoxCodeInputErr101
 			bp.ReturnMsg = err.Error()
+			bp.Status = "COMPLETE"
 			goto CALLEND
 		}
 	}
@@ -403,6 +409,7 @@ func callbox(w http.ResponseWriter, r *http.Request) {
 			bp.Type = CallBox_ResTypeInputErr
 			bp.Code = CallBoxCodeInputErr102
 			bp.ReturnMsg = err.Error()
+			bp.Status = "COMPLETE"
 			goto CALLEND
 		}
 
@@ -417,6 +424,7 @@ func callbox(w http.ResponseWriter, r *http.Request) {
 		bp.Type = CallBox_ResTypeInputErr
 		bp.Code = CallBoxCodeInputErr105
 		bp.ReturnMsg = "input err:box name null"
+		bp.Status = "COMPLETE"
 	}
 	//------------------------------
 CALLEND:
@@ -445,6 +453,7 @@ func taskRes(w http.ResponseWriter, r *http.Request) {
 		bp.Type = CallBox_ResTypeInputErr
 		bp.Code = CallBoxCodeInputErr100
 		bp.ReturnMsg = err.Error()
+		bp.Status = "COMPLETE"
 		goto CALLEND
 	}
 
@@ -454,6 +463,7 @@ func taskRes(w http.ResponseWriter, r *http.Request) {
 			bp.Type = CallBox_ResTypeInputErr
 			bp.Code = CallBoxCodeInputErr101
 			bp.ReturnMsg = err.Error()
+			bp.Status = "COMPLETE"
 			goto CALLEND
 		}
 	}
@@ -480,6 +490,7 @@ func taskRes(w http.ResponseWriter, r *http.Request) {
 			bp.Type = CallBox_ResTypeInputErr
 			bp.Code = CallBoxCodeInputErr102
 			bp.ReturnMsg = err.Error()
+			bp.Status = "COMPLETE"
 			goto CALLEND
 		}
 
@@ -494,6 +505,7 @@ func taskRes(w http.ResponseWriter, r *http.Request) {
 		bp.Type = CallBox_ResTypeInputErr
 		bp.Code = CallBoxCodeInputErr105
 		bp.ReturnMsg = "input err:box name null"
+		bp.Status = "COMPLETE"
 	}
 	//------------------------------
 CALLEND:

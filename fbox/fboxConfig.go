@@ -84,6 +84,8 @@ func ResetConf(icfg base.BoxConfig) {
 
 	reSet(&cfg.Version, icfg.Version, "1.0.1")
 
+	cfg.IsSync = icfg.IsSync
+
 	err := base.SetBoxConfig(cfg)
 	if err != nil {
 		base.Log("box:", cfg.Name, " init error:", err)
