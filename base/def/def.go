@@ -31,6 +31,7 @@ type (
 
 		//对应模式的连接方式
 		//若为http则为http地址端口
+		//若为rpc则为rpc监听地址端口
 		//若为nats则为nats监听topic
 		ModeInfo string
 	}
@@ -70,7 +71,7 @@ type (
 	InputData struct {
 		//		RemoteInfo string                 // 请求来源信息 默认传入请求ip地址
 		IsSync     bool                   // 是否同步模式执行
-		SubBoxName string                 // 数据类型
+		SubBoxName string                 // 子模块名
 		Data       map[string]interface{} // 数据内容
 	}
 

@@ -70,13 +70,13 @@ func (l *taskResData) Run(in InputData) {
 	/*
 	 这里添加任务执行代码
 	*/
-	base.Log(l.TaskId, " task Start:", in)
+	//base.Log(l.TaskId, " task Start:", in)
 	//任务执行完成的处理
 	l.Type, l.Data = taskFunc(in)
 	l.IsSync = in.IsSync
 	l.Status = "COMPLETE"
 	l.endTime = time.Now().Unix()
-	base.Log(in, " ret:", l.Type)
+	//base.Log(in, " ret:", l.Type)
 }
 
 func (g *fboxBox) Init() bool {
@@ -212,9 +212,9 @@ func (g *fboxBox) Output(taskid string) (m BoxOutPut) {
 		}
 	} else {
 		m.IsSync = true
-		m.Data = "    inmap error"
+		m.Data = "    input data error"
 		m.Status = "COMPLETE"
-		base.Log(taskid, "inmap error or:", ok)
+		base.Log(taskid, "input data ", ok)
 	}
 	return
 }

@@ -11,9 +11,11 @@ import (
 	"encoding/json"
 	"errors"
 	"flag"
+	"fmt"
 	"os"
 	"strings"
 
+	"github.com/rlds/rbox/base/def"
 	. "github.com/rlds/rbox/base/def"
 	"github.com/rlds/rbox/base/util"
 	"github.com/rlds/rlog"
@@ -51,6 +53,11 @@ type (
 		Output(taskid string) BoxOutPut
 	}
 
+	BoxClient interface {
+		Call(in def.RequestIn, hres *def.BoxOutPut) (err error)
+		Status(in def.RequestIn, hres *def.BoxOutPut) (err error)
+		Ping(in string, out *string) bool
+	}
 	//执行器
 	Worker interface {
 		//注册至webserver
@@ -69,6 +76,7 @@ const (
 	ModeType_HTTP    = "http"    //http 模式
 	ModeType_Command = "command" //command 命令行模式
 	ModeType_Nats    = "nats"    //nats 模式
+	ModeType_Rpc     = "rpc"     //rpc 模式
 )
 
 var (
@@ -106,6 +114,12 @@ func (m *rbox) setMode(mode, subbox, input string) (err error) {
 			isCommand = false
 			var nw natsModeWorker
 			gbox.worker = &nw
+		}
+	case ModeType_Rpc:
+		{
+			isCommand = false
+			var rp rpcModeWorker
+			gbox.worker = &rp
 		}
 	default:
 		{
@@ -198,4 +212,29 @@ func RegisterBox(b Box) {
 //执行接口
 func Run() {
 	gbox.worker.Run()
+}
+
+var modeClientError = fmt.Errorf("mode client error")
+
+// NewBoxClient 创建box客户端
+func NewBoxClient(box *def.BoxInfo) (bc BoxClient, err error) {
+	switch box.Mode {
+	case "http":
+		{
+			bc, err = NewHTTPClient(box)
+		}
+	case "rpc":
+		{
+			bc, err = NewRpcClient(box)
+		}
+	// case "nats":
+	// 	{
+	// 		bc = nil
+	// 	}
+	default:
+		{
+			err = fmt.Errorf(box.Mode + " mode client error")
+		}
+	}
+	return
 }
