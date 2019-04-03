@@ -110,6 +110,7 @@ func (clt *BoxHTTPClient) init() error {
 
 // Call 功能调用
 func (clt *BoxHTTPClient) Call(in def.RequestIn, hres *def.BoxOutPut) error {
+	in.Input.IsSync = in.Input.IsSync || clt.box.IsSync
 	return clt.post(clt.callPath, util.ObjToStr(in), hres)
 }
 

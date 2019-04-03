@@ -23,7 +23,6 @@ func (b *boxInfo) Init() (err error) {
    开始执行任务
 */
 func (b *boxInfo) DoWork(indat def.RequestIn) (rt def.BoxOutPut) {
-	indat.Input.IsSync = b.IsSync
 	var err error
 	if b.isAlive {
 		switch b.connType {

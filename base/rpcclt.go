@@ -77,6 +77,7 @@ func (box *BoxRpcClient) init() error {
 
 // Call rpc 调研访问功能
 func (box *BoxRpcClient) Call(in def.RequestIn, hres *def.BoxOutPut) (err error) {
+	in.Input.IsSync = in.Input.IsSync || box.box.IsSync
 	err = box.call("RpcWorker.Call", in, hres)
 	return
 }
