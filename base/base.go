@@ -57,6 +57,7 @@ type (
 		Call(in def.RequestIn, hres *def.BoxOutPut) (err error)
 		Status(in def.RequestIn, hres *def.BoxOutPut) (err error)
 		Ping(in string, out *string) bool
+		Close() error
 	}
 	//执行器
 	Worker interface {

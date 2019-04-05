@@ -7,11 +7,12 @@
 package fbox
 
 import (
+	"fmt"
 	"sync"
 	"time"
 
 	"github.com/rlds/rbox/base"
-	. "github.com/rlds/rbox/base/def"
+	"github.com/rlds/rbox/base/def"
 
 	/*
 		下面为需要添加引入的包
@@ -39,26 +40,26 @@ type fboxBox struct {
 }
 
 type taskResData struct {
-	BoxOutPut
+	def.BoxOutPut
 	startTime int64
 	endTime   int64
 }
 
 const (
-	C_CleanTaskTimeStep     = 60 * 3 //3分钟
-	C_TaskInfoStoreTimeStep = 60 * 5 //5分钟
+	_TaskidNullOrDataErr = "10"
+	_InputDataErr        = "11"
 )
 
-type TFunc func(InputData) (string, interface{})
+var (
+	taskFunc      TFunc
+	errtaskIdNull = fmt.Errorf("taskid is null")
 
-var taskFunc TFunc
-
-func RegisterFunc(f TFunc) {
-	taskFunc = f
-}
+	_CleanTaskTimeStep     = int64(179) //3分钟 -1
+	_TaskInfoStoreTimeStep = int64(360) //6分钟
+)
 
 //执行任务
-func (l *taskResData) Run(in InputData) {
+func (l *taskResData) Run(in def.InputData) {
 	/*
 	 任务开始的一些设置
 	*/
@@ -81,8 +82,8 @@ func (l *taskResData) Run(in InputData) {
 
 func (g *fboxBox) Init() bool {
 	g.modeName, g.isCommandMode = base.GetRunMode()
-	g.cleanTaskTimeStep = C_CleanTaskTimeStep
-	g.taskInfoStoreTimeStep = C_TaskInfoStoreTimeStep
+	g.cleanTaskTimeStep = _CleanTaskTimeStep
+	g.taskInfoStoreTimeStep = _TaskInfoStoreTimeStep
 	g.lastCleanStartTime = time.Now().Unix()
 	if g.isCommandMode {
 		go g.cleanTaskInfo()
@@ -105,26 +106,39 @@ func (g *fboxBox) Init() bool {
         数据的最终获得结果由 Output() 给出
         需要主动记录任务id及最终结果以备输出
 */
-func (g *fboxBox) DoWork(taskid string, input InputData) (err error) {
+func (g *fboxBox) DoWork(taskid string, input def.InputData) (err error) {
+	if len(taskid) < 1 {
+		return errtaskIdNull
+	}
+
 	/*
 	 这里可以先执行然后存储结果
 	 也可以在此记录输入在其他步骤中执行
-	 还可以移步执行存储移步执行关键指针最终存储结果
+	 还可以异步执行存储移步执行关键指针最终存储结果
 	*/
-	_, ok := g.taskIdInfoMap.Load(taskid)
-	if !ok { //
+	if input.IsSync {
 		tskdo := new(taskResData)
-		//任务开始的一些设置处理 异步执行的任务需要关注
 		g.taskIdInfoMap.Store(taskid, tskdo)
-		if input.IsSync || g.isCommandMode {
-			tskdo.Run(input)
-		} else {
+		tskdo.Run(input)
+	} else { // 异步执行
+		// 查看任务是否存在
+		// 异步执行必须每次任务id不同
+		tskdoInf, ok := g.taskIdInfoMap.Load(taskid)
+		if ok && nil != tskdoInf {
+			tskdo := tskdoInf.(taskResData)
+			// 若还有其他不可修改的状态 需要加上
+			if tskdo.Status != "COMPLETE" {
+				tskdo.Status = "PROGRESS"
+			}
+		} else { // 任务不存在
+			tskdo := new(taskResData)
+			g.taskIdInfoMap.Store(taskid, tskdo)
 			tskdo.Data = "# start"
 			tskdo.Status = "Start"
 			go tskdo.Run(input)
 		}
-
 	}
+
 	return
 }
 
@@ -134,7 +148,7 @@ func (g *fboxBox) DoWork(taskid string, input InputData) (err error) {
     说明：
         外部获得任务的结果
 */
-func (g *fboxBox) Output(taskid string) (m BoxOutPut) {
+func (g *fboxBox) Output(taskid string) (m def.BoxOutPut) {
 
 	// 返回结果格式
 	// 允许自定义格式但需要外部支持展示使用
@@ -205,14 +219,14 @@ func (g *fboxBox) Output(taskid string) (m BoxOutPut) {
 				//-----------------------------------------------------
 			}
 		} else {
-			m.Data = "    data err"
-			m.IsSync = true
+			m.Code = _InputDataErr
+			m.ReturnMsg = "input data error"
 			m.Status = "COMPLETE"
 			base.Log(taskid, "data nil ")
 		}
 	} else {
-		m.IsSync = true
-		m.Data = "    input data error"
+		m.Code = _TaskidNullOrDataErr
+		m.ReturnMsg = "taskid error"
 		m.Status = "COMPLETE"
 		base.Log(taskid, "input data ", ok)
 	}
@@ -221,11 +235,13 @@ func (g *fboxBox) Output(taskid string) (m BoxOutPut) {
 
 //自动清理过期的数据信息
 func (g *fboxBox) cleanTaskInfo() {
-	clean_step := time.Second * time.Duration(g.cleanTaskTimeStep)
+	cleanStep := time.Second * time.Duration(g.cleanTaskTimeStep)
 	for {
-		time.Sleep(clean_step)
+		base.Log("cleanStart")
+		time.Sleep(cleanStep)
 		g.lastCleanStartTime = time.Now().Unix()
 		g.taskIdInfoMap.Range(g.rangeTidInfoDo)
+		base.Log("cleanEnd")
 	}
 }
 

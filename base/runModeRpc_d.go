@@ -14,20 +14,17 @@ import (
 	. "github.com/rlds/rbox/base/util"
 )
 
-/*
-   rpc模式接口
-*/
-
-type RpcWorker struct {
-	Name string
-}
+// RpcWorker rpc mode1
+//    rpc模式接口
+//    此模式下tcp为短链接方式使用
+type RpcWorker struct{}
 
 func newWorker() *RpcWorker {
-	return &RpcWorker{"test"}
+	return &RpcWorker{}
 }
 
 func (w *RpcWorker) Call(in def.RequestIn, hres *def.BoxOutPut) error {
-	Log("call T:", in.TaskId, " F:", in.From, " C:", in.Call)
+	Log("call T:", in.TaskId, " F:", in.From, " C:", in.Call, " in:", in.Input)
 	box.DoWork(in.TaskId, in.Input)
 	*hres = box.Output(in.TaskId)
 	hres.TaskId = in.TaskId
@@ -46,15 +43,21 @@ func (w *RpcWorker) Ping(in string, out *string) error {
 	return nil
 }
 
+// 超时时间3秒
+const timeOut = time.Second * 3
+
 func timeoutCoder(f func(interface{}) error, e interface{}, msg string) error {
 	echan := make(chan error, 1)
 	go func() { echan <- f(e) }()
 	select {
 	case e := <-echan:
 		return e
-	case <-time.After(time.Minute):
+	case <-time.After(timeOut):
 		return fmt.Errorf("Timeout %s", msg)
 	}
+	// case <-time.After(time.Minute):
+	// 	return fmt.Errorf("Timeout %s", msg)
+	// }
 }
 
 type gobServerCodec struct {
@@ -151,7 +154,8 @@ func (r *rpcModeWorker) Run() {
 			Log("Error: accept rpc connection", err.Error())
 			continue
 		}
-		go func(conn net.Conn) {
+		// Log("ConnLocalAddr:", conn.RemoteAddr())
+		go func(conn net.Conn) { //短连接模式
 			buf := bufio.NewWriter(conn)
 			srv := &gobServerCodec{
 				rwc: conn,

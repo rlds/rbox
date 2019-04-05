@@ -123,6 +123,12 @@ func (clt *BoxHTTPClient) Status(in def.RequestIn, hres *def.BoxOutPut) error {
 func (clt *BoxHTTPClient) Ping(in string, out *string) bool {
 	return clt.postPing()
 }
+
+// Close x
+func (clt *BoxHTTPClient) Close() error {
+	return nil
+}
+
 func (clt *BoxHTTPClient) post(urlpath, indat string, out *def.BoxOutPut) (err error) {
 	reTimes := 0
 	var (

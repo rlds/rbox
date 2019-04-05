@@ -13,9 +13,8 @@ import (
 )
 
 /*
-   rpc模式的客户端
+   rpc短连接模式的客户端
 */
-
 type gobClientCodec struct {
 	rwc io.ReadWriteCloser
 	dec *gob.Decoder
@@ -93,6 +92,14 @@ func (box *BoxRpcClient) Ping(in string, out *string) (ok bool) {
 	err := box.call("RpcWorker.Ping", in, out)
 	ok = err == nil && *out == "ok"
 	return
+}
+
+// Close 关闭连接
+func (box *BoxRpcClient) Close() error {
+	if nil != box.rpcClient {
+		return box.rpcClient.Close()
+	}
+	return nil
 }
 
 func (box *BoxRpcClient) call(callName string, in interface{}, hres interface{}) (err error) {
