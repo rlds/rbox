@@ -78,6 +78,7 @@ const (
 	ModeType_Command = "command" //command 命令行模式
 	ModeType_Nats    = "nats"    //nats 模式
 	ModeType_Rpc     = "rpc"     //rpc 模式
+	ModeType_Rpcd    = "rpcd"    //rpc 短链接模式
 )
 
 var (
@@ -120,6 +121,12 @@ func (m *rbox) setMode(mode, subbox, input string) (err error) {
 		{
 			isCommand = false
 			var rp rpcModeWorker
+			gbox.worker = &rp
+		}
+	case ModeType_Rpcd:
+		{
+			isCommand = false
+			var rp rpcdModeWorker
 			gbox.worker = &rp
 		}
 	default:
@@ -186,7 +193,7 @@ func Init() {
 		subbox string
 	)
 	flag.StringVar(&logdir, "log", gbox.cfg.LogDir, "日志输出文件夹路径")
-	flag.StringVar(&mode, "mode", "", "运行模式(http,command,nats) eg: -mode http")
+	flag.StringVar(&mode, "mode", "", "运行模式(http,command,nats) eg: -mode http|rpc")
 	flag.StringVar(&subbox, "subbox", "", "子功能模块名称 eg: \n\t -subbox "+paramSubBox(gbox.cfg))
 	flag.StringVar(&input, "input", "", "输入参数信息json格式 注意值类型需要一致 eg: "+ParamToMapEg(gbox.cfg)+"")
 	flag.Parse()
@@ -227,6 +234,10 @@ func NewBoxClient(box *def.BoxInfo) (bc BoxClient, err error) {
 	case "rpc":
 		{
 			bc, err = NewRpcClient(box)
+		}
+	case "rpcd":
+		{
+			bc, err = NewRpcdClient(box)
 		}
 	// case "nats":
 	// 	{

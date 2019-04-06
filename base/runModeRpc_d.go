@@ -14,16 +14,16 @@ import (
 	. "github.com/rlds/rbox/base/util"
 )
 
-// RpcWorker rpc mode1
+// RpcdWorker rpc mode1
 //    rpc模式接口
 //    此模式下tcp为短链接方式使用
-type RpcWorker struct{}
+type RpcdWorker struct{}
 
-func newWorker() *RpcWorker {
-	return &RpcWorker{}
+func newdWorker() *RpcdWorker {
+	return &RpcdWorker{}
 }
 
-func (w *RpcWorker) Call(in def.RequestIn, hres *def.BoxOutPut) error {
+func (w *RpcdWorker) Call(in def.RequestIn, hres *def.BoxOutPut) error {
 	Log("call T:", in.TaskId, " F:", in.From, " C:", in.Call, " in:", in.Input)
 	box.DoWork(in.TaskId, in.Input)
 	*hres = box.Output(in.TaskId)
@@ -31,14 +31,14 @@ func (w *RpcWorker) Call(in def.RequestIn, hres *def.BoxOutPut) error {
 	return nil
 }
 
-func (w *RpcWorker) Status(in def.RequestIn, hres *def.BoxOutPut) error {
+func (w *RpcdWorker) Status(in def.RequestIn, hres *def.BoxOutPut) error {
 	Log("status T:", in.TaskId, " F:", in.From, " C:", in.Call)
 	*hres = box.Output(in.TaskId)
 	hres.TaskId = in.TaskId
 	return nil
 }
 
-func (w *RpcWorker) Ping(in string, out *string) error {
+func (w *RpcdWorker) Ping(in string, out *string) error {
 	*out = "ok"
 	return nil
 }
@@ -105,7 +105,7 @@ func (c *gobServerCodec) Close() error {
 	return c.rwc.Close()
 }
 
-type rpcModeWorker struct {
+type rpcdModeWorker struct {
 }
 
 func checkRpcModeHost(host string) string {
@@ -117,7 +117,7 @@ func checkRpcModeHost(host string) string {
 }
 
 // 注册
-func (r *rpcModeWorker) Register() {
+func (r *rpcdModeWorker) Register() {
 	gbox.cfg.Mode = "rpc"
 	//Log(gbox.cfg)
 	gbox.cfg.BoxInfo.ModeInfo = checkRpcModeHost(gbox.cfg.BoxInfo.ModeInfo)
@@ -131,7 +131,7 @@ func (r *rpcModeWorker) Register() {
 }
 
 // 启动服务
-func (r *rpcModeWorker) Run() {
+func (r *rpcdModeWorker) Run() {
 	Log("rpc mode start")
 
 	gobRegister()

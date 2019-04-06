@@ -46,21 +46,21 @@ func (c *gobClientCodec) Close() error {
 	return c.rwc.Close()
 }
 
-// BoxRpcClient 客户端信息
-type BoxRpcClient struct {
+// BoxRpcdClient 客户端信息
+type BoxRpcdClient struct {
 	box       *def.BoxInfo
 	rpcClient *rpc.Client
 }
 
 // NewRpcClient 客户端初始化
-func NewRpcClient(box *def.BoxInfo) (bclt *BoxRpcClient, err error) {
-	bclt = new(BoxRpcClient)
+func NewRpcdClient(box *def.BoxInfo) (bclt *BoxRpcdClient, err error) {
+	bclt = new(BoxRpcdClient)
 	bclt.box = box
 	err = bclt.init()
 	return
 }
 
-func (box *BoxRpcClient) init() error {
+func (box *BoxRpcdClient) init() error {
 	gobRegister()
 	conn, err := net.DialTimeout("tcp", box.box.ModeInfo, time.Minute*10)
 	if err != nil {
@@ -75,34 +75,34 @@ func (box *BoxRpcClient) init() error {
 }
 
 // Call rpc 调研访问功能
-func (box *BoxRpcClient) Call(in def.RequestIn, hres *def.BoxOutPut) (err error) {
+func (box *BoxRpcdClient) Call(in def.RequestIn, hres *def.BoxOutPut) (err error) {
 	in.Input.IsSync = in.Input.IsSync || box.box.IsSync
 	err = box.call("RpcWorker.Call", in, hres)
 	return
 }
 
 // Status rpc 查询状态
-func (box *BoxRpcClient) Status(in def.RequestIn, hres *def.BoxOutPut) (err error) {
+func (box *BoxRpcdClient) Status(in def.RequestIn, hres *def.BoxOutPut) (err error) {
 	err = box.call("RpcWorker.Status", in, hres)
 	return
 }
 
 // Ping 心跳监测
-func (box *BoxRpcClient) Ping(in string, out *string) (ok bool) {
+func (box *BoxRpcdClient) Ping(in string, out *string) (ok bool) {
 	err := box.call("RpcWorker.Ping", in, out)
 	ok = err == nil && *out == "ok"
 	return
 }
 
 // Close 关闭连接
-func (box *BoxRpcClient) Close() error {
+func (box *BoxRpcdClient) Close() error {
 	if nil != box.rpcClient {
 		return box.rpcClient.Close()
 	}
 	return nil
 }
 
-func (box *BoxRpcClient) call(callName string, in interface{}, hres interface{}) (err error) {
+func (box *BoxRpcdClient) call(callName string, in interface{}, hres interface{}) (err error) {
 	tryOnce := true
 TRY:
 	err = box.rpcClient.Call(callName, in, hres)
