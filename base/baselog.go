@@ -7,24 +7,26 @@
 //
 package base
 
-import(
-    "fmt"
+import (
+	"fmt"
+
 	"github.com/rlds/rlog"
 )
 
 /*
-    统一的日志输出
+   统一的日志输出
 */
-const(
-    MaxLogLen_m = 1024 * 1024 * 1000 
+const (
+	MaxLogLenM = 1024 * 1024 * 1000
 )
 
 var isCommand bool
 
-func Log(args ...interface{}){
+// Log 日志输出
+func Log(args ...interface{}) {
 	if isCommand {
 		fmt.Println(args...)
-	}else{
+	} else {
 		rlog.V(1).Info(args...)
 	}
 }

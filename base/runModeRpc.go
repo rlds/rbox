@@ -19,7 +19,8 @@ func newWorker() *RpcWorker {
 
 // Call 执行请求
 func (w *RpcWorker) Call(in def.RequestIn, hres *def.BoxOutPut) error {
-	Log("call T:", in.TaskId, " F:", in.From, " C:", in.Call, " in:", in.Input)
+	Log("call T:", in.TaskId, " F:", in.From, " C:", in.Call) //, " in:", in.Input)
+	//Log("call T:", in.TaskId, " F:", in.From, " C:", in.Call, " in:", in.Input)
 	box.DoWork(in.TaskId, in.Input)
 	*hres = box.Output(in.TaskId)
 	hres.TaskId = in.TaskId
@@ -43,7 +44,7 @@ func (w *RpcWorker) Ping(in string, out *string) error {
 type rpcModeWorker struct {
 }
 
-// 注册
+// Register 注册
 func (r *rpcModeWorker) Register() {
 	gbox.cfg.Mode = "rpc"
 	//Log(gbox.cfg)
@@ -57,7 +58,7 @@ func (r *rpcModeWorker) Register() {
 	}
 }
 
-// 启动服务
+// Run 启动服务
 func (r *rpcModeWorker) Run() {
 	Log("rpc mode start")
 	gobRegister()

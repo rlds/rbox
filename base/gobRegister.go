@@ -23,5 +23,10 @@ func gobRegister() {
 	gob.Register(&[]*def.DbInfo{})
 	gob.Register(&[]*def.ListInfo{})
 	gob.Register(&def.ReturnData{})
+	gob.Register(&def.TimeCounterResult{})
+	gob.Register(&[]*def.TimeCounterResult{})
+	gob.Register(&def.TimeCountRes{})
+	gob.Register(&[]def.TimeCountRes{})
+	gob.Register(&[]*def.TimeCountRes{})
 	// gob.Register(&def.ReturnData{})
 }
