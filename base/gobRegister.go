@@ -28,5 +28,6 @@ func gobRegister() {
 	gob.Register(&def.TimeCountRes{})
 	gob.Register(&[]def.TimeCountRes{})
 	gob.Register(&[]*def.TimeCountRes{})
+	gob.Register(BoxConfig{})
 	// gob.Register(&def.ReturnData{})
 }

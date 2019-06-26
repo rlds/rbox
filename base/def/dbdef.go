@@ -3,6 +3,7 @@ package def
 // DataList 数据列表返回
 type DataList struct {
 	GetNum int
+	MaxId  uint64
 	Data   []DataItem
 }
 

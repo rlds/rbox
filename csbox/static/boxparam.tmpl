@@ -6,6 +6,7 @@
     <div class="subBoxSel" >
        <label>请选择操作：</label>
        <select id="boxSel">
+        <option>请选择:</option>
 	    {{range .SubBoxs}}<option value="{{.SubName}}">{{.Label}}</option>
 	    {{end}}
        </select>
