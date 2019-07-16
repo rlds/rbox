@@ -29,5 +29,16 @@ func gobRegister() {
 	gob.Register(&[]def.TimeCountRes{})
 	gob.Register(&[]*def.TimeCountRes{})
 	gob.Register(BoxConfig{})
+	gob.Register(map[string]uint64{})
+	gob.Register(map[string][]uint64{})
+	gob.Register(map[string][]string{})
+	gob.Register(map[string]string{})
+	gob.Register([]def.Pinfo{})
+	gob.Register([]*def.Pinfo{})
+	gob.Register([]def.Pcharge{})
+	gob.Register([]*def.Pcharge{})
+	gob.Register([]def.BillInfo{})
+	gob.Register([]*def.BillInfo{})
+
 	// gob.Register(&def.ReturnData{})
 }
