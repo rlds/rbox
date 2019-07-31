@@ -3,6 +3,7 @@ package db
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"strings"
 	"sync"
@@ -23,6 +24,29 @@ type DataItem = def.DataItem
 
 // LevelDbOptions 配置参数信息
 type LevelDbOptions = def.LevelDbOptions
+
+const (
+	uint64ByteNum = 8
+
+	//KeyOnly key查找
+	KeyOnly = 0
+	//KeyIndex 前缀查找
+	KeyIndex = 1
+	//KeyContens key包含查找
+	KeyContens = 2
+	//ValueContent value 包含查找
+	ValueContent = 3
+
+	//AutoIdStartNum 自动编号初始值
+	AutoIdStartNum = uint64(10)
+)
+
+var (
+	//ErrDBNOTFUNDERROR 库不存在
+	ErrDBNOTFUNDERROR = errors.New("db not found")
+	//ErrLISTNOTFOUND 列表不存在
+	ErrLISTNOTFOUND = errors.New("list not found")
+)
 
 // DbInfo  库的信息
 // 用于使用这些信息重启库
@@ -258,7 +282,7 @@ func (ll *LevelDbList) addList(li *ListInfo) (err error) {
 	if !ok {
 		dbi = new(DbInfo)
 		dbi.DbName = li.DbName
-		dbi.Description = getDateStr()
+		dbi.Description = butil.GetDateStr()
 		err = ll.AddDb(dbi, nil)
 		if err != nil {
 			err = ErrDBNOTFUNDERROR
