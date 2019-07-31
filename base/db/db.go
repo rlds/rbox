@@ -85,6 +85,25 @@ type LevelDbList struct {
 	listinfo map[string]*ListInfo //列表信息 key 为 db+listname 需要listname在db中唯一
 }
 
+func (ll *LevelDbList) OpenDb(name string, opts interface{}) (db *leveldb.DB, err error) {
+	var lvbopt *LevelDbOptions
+	if opts == nil {
+		lvbopt = &defaultLevelDbOption
+	} else {
+		lvbopt = opts.(*LevelDbOptions)
+	}
+	sysPath := ll.sysPath
+	ll.sysdb, err = leveldb.OpenFile(sysPath+name, &opt.Options{
+		BlockCacheCapacity:   lvbopt.BlockCacheCapacity, //
+		BlockSize:            lvbopt.BlockSize,
+		CompactionTableSize:  lvbopt.CompactionTableSize, //单个数据文件的最大大小
+		CompactionTotalSize:  lvbopt.CompactionTotalSize,
+		IteratorSamplingRate: lvbopt.IteratorSamplingRate,
+		WriteBuffer:          lvbopt.WriteBuffer, //日志的最大大小
+	})
+	return
+}
+
 // Init 初始化加载
 // 初始化步骤
 // 打开系统库，

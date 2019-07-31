@@ -8,15 +8,20 @@
 
 package util
 
-
-import(
-       "crypto/md5"
-       "encoding/hex"
+import (
+	"crypto/md5"
+	"encoding/hex"
 )
 
 // GetMd5Str MD5
-func GetMd5Str(b []byte)string{
-    h := md5.New()
-    h.Write(b)
-    return hex.EncodeToString(h.Sum(nil))
+func GetMd5Str(b []byte) string {
+	h := md5.New()
+	h.Write(b)
+	return hex.EncodeToString(h.Sum(nil))
+}
+
+func GetMd5Byte(b []byte) []byte {
+	h := md5.New()
+	h.Write(b)
+	return h.Sum(nil)
 }
