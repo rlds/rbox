@@ -30,3 +30,7 @@ func Log(args ...interface{}) {
 		rlog.V(1).Info(args...)
 	}
 }
+
+func LogInit(logpath string) {
+	rlog.LogInit(3, logpath, MaxLogLenM, 1)
+}
