@@ -93,7 +93,7 @@ func (ll *LevelDbList) OpenDb(name string, opts interface{}) (db *leveldb.DB, er
 		lvbopt = opts.(*LevelDbOptions)
 	}
 	sysPath := ll.sysPath
-	ll.sysdb, err = leveldb.OpenFile(sysPath+name, &opt.Options{
+	db, err = leveldb.OpenFile(sysPath+name, &opt.Options{
 		BlockCacheCapacity:   lvbopt.BlockCacheCapacity, //
 		BlockSize:            lvbopt.BlockSize,
 		CompactionTableSize:  lvbopt.CompactionTableSize, //单个数据文件的最大大小
@@ -631,6 +631,37 @@ func (ll *LevelDbList) GetDataById(dbName, listName string, start, getNum uint64
 	// 	}
 	// 	return n >= getNum
 	// })
+	data.MaxId = li.AutoId
+	data.GetNum = len(data.Data)
+	return
+}
+
+// GetDataById 根据id查找数据 生序
+func (ll *LevelDbList) GetDataByIdEsc(dbName, listName string, start, getNum uint64) (data def.DataList, err error) {
+	if getNum <= 0 {
+		return
+	}
+	li, ok := ll.listinfo[dbName+listName]
+	if !ok {
+		err = ErrLISTNOTFOUND
+		return
+	}
+	endId := li.AutoId
+	if start > li.AutoId {
+		return
+	}
+	n := uint64(0)
+	for {
+		di, err := li.getDataById(start)
+		if err == nil {
+			data.Data = append(data.Data, di)
+			n++
+		}
+		if start >= endId || n >= getNum {
+			break
+		}
+		start++
+	}
 	data.MaxId = li.AutoId
 	data.GetNum = len(data.Data)
 	return

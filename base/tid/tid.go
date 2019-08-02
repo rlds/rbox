@@ -16,6 +16,7 @@ type TaskID struct {
 	weeknum    int
 	weeknumstr string
 	mu         sync.RWMutex
+	t          time.Time
 }
 
 // NewTaskID 用于生成任务id
@@ -40,9 +41,9 @@ func (w *TaskID) GetTid() string {
 }
 
 func (w *TaskID) setStart() {
-	t := time.Now()
-	y, m, d := t.Date() //天数值初始化
-	h, mm, cs := t.Clock()
+	w.t = time.Now()
+	y, m, d := w.t.Date() //天数值初始化
+	h, mm, cs := w.t.Clock()
 	w.bPidpre[2] = rhex.IntToNbyte(y - 2000)
 	w.bPidpre[3] = rhex.IntToNbyte(int(m))
 	w.bPidpre[4] = rhex.IntToNbyte(d)
@@ -54,17 +55,17 @@ func (w *TaskID) setStart() {
 // 进行时间的处理
 func (w *TaskID) sysTimer() {
 	for {
-		t := time.Now()
-		h, m, cs := t.Clock()
+		w.t = time.Now()
+		h, m, cs := w.t.Clock()
 		w.mu.Lock() //锁住
 		if w.lasth != h {
 			w.lasth = h
 			if h == 0 { //天的数据清0
-				y, m, d := t.Date()
+				y, m, d := w.t.Date()
 				w.bPidpre[2] = rhex.IntToNbyte(y - 2000)
 				w.bPidpre[3] = rhex.IntToNbyte(int(m))
 				w.bPidpre[4] = rhex.IntToNbyte(d)
-				_, wn := t.ISOWeek()
+				_, wn := w.t.ISOWeek()
 				w.weeknum = y*100 + wn
 				w.weeknumstr = util.IntToStr(w.weeknum)
 			}
@@ -84,4 +85,8 @@ func (w *TaskID) GetWeekNum() int {
 
 func (w *TaskID) GetWeekStr() string {
 	return w.weeknumstr
+}
+
+func (w *TaskID) GetUnixTime() int64 {
+	return w.t.Unix()
 }
