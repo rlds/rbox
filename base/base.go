@@ -212,14 +212,19 @@ func Init() {
 		input  string
 		logdir string
 		subbox string
+		host   string
 	)
-
+	defaultHost := getDefaultHost()
+	flag.StringVar(&host, "host", defaultHost, "http/rpc模式开启服务的域名端口")
 	flag.StringVar(&logdir, "log", gbox.cfg.LogDir, "日志输出文件夹路径")
 	flag.StringVar(&mode, "mode", "", "运行模式(http,command,nats) eg: -mode http|rpc|rpcd\n\t http 模式使用http方式调用\n\t rpc 采用rpc tcp模式调用 \n\t rpcd 采用rpc tcp 短链接方式调用每个请求建立一次连接")
 	flag.StringVar(&subbox, "subbox", "", "子功能模块名称 eg: \n\t -subbox "+paramSubBox(gbox.cfg))
 	flag.StringVar(&input, "input", "", "输入参数信息json格式 注意值类型需要一致 eg: "+ParamToMapEg(gbox.cfg)+"")
 	flag.Parse()
 
+	if host != "" && host != defaultHost {
+		setDefaultHost(host)
+	}
 	//模式设置
 	err := gbox.setMode(mode, subbox, input)
 	if err != nil {
@@ -240,6 +245,19 @@ func Init() {
 			Log("boxBeforeStartFunc error:", err)
 			os.Exit(3)
 		}
+	}
+}
+
+func getDefaultHost() string {
+	return gbox.cfg.SelfHttpServerHost
+}
+
+func setDefaultHost(host string) {
+	gbox.cfg.SelfHttpServerHost = host
+	arr := strings.Split(gbox.cfg.ModeInfo, ":")
+	arr2 := strings.Split(host, ":")
+	if len(arr) == 3 {
+		gbox.cfg.ModeInfo = arr[0] + ":" + arr[1] + ":" + arr2[1]
 	}
 }
 
