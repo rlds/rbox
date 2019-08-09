@@ -60,3 +60,24 @@ func TestAndCreateDir(path string) bool {
 	}
 	return false
 }
+
+func MkAlldir(dir string) bool {
+	err := os.MkdirAll(dir, os.ModePerm)
+	if err != nil {
+		//rlog.V(1).Info(HC+"建立文件夹出现错误["+err.Error()+"]"+EC)
+		return false
+	}
+	return true
+}
+
+func DelFile(path string) error {
+	return os.Remove(path)
+}
+
+func DelDir(path string) error {
+	return os.RemoveAll(path)
+}
+
+func GetSubPath(dir, path string) string {
+	return path[len(dir):]
+}
