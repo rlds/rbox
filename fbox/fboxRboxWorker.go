@@ -110,7 +110,7 @@ func (g *fboxBox) DoWork(taskid string, input def.InputData) (err error) {
 	if len(taskid) < 1 {
 		return errtaskIdNull
 	}
-
+	input.TaskId = taskid
 	/*
 	 这里可以先执行然后存储结果
 	 也可以在此记录输入在其他步骤中执行

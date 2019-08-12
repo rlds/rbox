@@ -69,7 +69,8 @@ type (
 	}
 
 	InputData struct {
-		//		RemoteInfo string                 // 请求来源信息 默认传入请求ip地址
+		TaskId     string
+		RemoteInfo string                 // 请求来源信息 默认传入请求ip地址
 		IsSync     bool                   // 是否同步模式执行
 		SubBoxName string                 // 子模块名
 		Data       map[string]interface{} // 数据内容

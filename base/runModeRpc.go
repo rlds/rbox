@@ -21,6 +21,7 @@ func newWorker() *RpcWorker {
 func (w *RpcWorker) Call(in def.RequestIn, hres *def.BoxOutPut) error {
 	Log("call T:", in.TaskId, " F:", in.From, " C:", in.Call) //, " in:", in.Input)
 	//Log("call T:", in.TaskId, " F:", in.From, " C:", in.Call, " in:", in.Input)
+	// in.Input.TaskId = in.TaskId
 	box.DoWork(in.TaskId, in.Input)
 	*hres = box.Output(in.TaskId)
 	hres.TaskId = in.TaskId

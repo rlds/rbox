@@ -86,7 +86,8 @@ func (h *httpModeWorker) boxServ(w http.ResponseWriter, r *http.Request) {
 			hres.ReturnMsg = err.Error()
 		} else {
 			Log("call T:", hi.TaskId, " F:", hi.From, " C:", hi.Call) //, " I:", hi.Input)
-			//Log("call T:", hi.TaskId, " F:", hi.From, " C:", hi.Call, " I:", hi.Input)
+			// Log("call T:", hi.TaskId, " F:", hi.From, " C:", hi.Call, " I:", hi.Input)
+			// hi.Input.TaskId = hi.TaskId
 			box.DoWork(hi.TaskId, hi.Input)
 			hres = box.Output(hi.TaskId)
 			hres.TaskId = hi.TaskId
