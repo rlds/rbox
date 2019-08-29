@@ -424,9 +424,9 @@ func setValue(numPos, val []byte) (res []byte) {
 
 // 建立数据单元结构
 func getDataItem(key, val []byte) (dif DataItem) {
-	dif.Key = key
+	dif.Key = append(dif.Key, key...)
 	dif.Id = butil.ByteToUint64(val[:8])
-	dif.Val = val[8:]
+	dif.Val = append(dif.Val, val[8:]...)
 	return
 }
 
@@ -716,4 +716,10 @@ func (ll *LevelDbList) RangeAll(dbname string) (err error) {
 		return false
 	})
 	return
+}
+
+// 数据的合并
+type MergerInfo struct {
+	From string // 数据合并来源库
+	To   string //
 }
