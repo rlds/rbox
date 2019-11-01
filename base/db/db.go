@@ -183,6 +183,13 @@ func (dbi *DbInfo) setAutoId() {
 	dbi.db.Put(idKey, butil.Uint64ToByte(dbi.autoId), nil)
 }
 
+// 关闭库
+func (dbi *DbInfo) Close() {
+	if dbi.db != nil {
+		dbi.db.Close()
+	}
+}
+
 // 每次使用2个id
 func (li *ListInfo) getPreKeys(id uint64) {
 	li.DataPre = butil.Uint64ToByte(id)
@@ -598,7 +605,7 @@ func (ll *LevelDbList) GetDbLists(dbName string) (lis []*def.ListInfo) {
 	return
 }
 
-// GetDataById 根据id查找数据
+// GetDataById 根据id查找数据 id降序
 func (ll *LevelDbList) GetDataById(dbName, listName string, start, getNum uint64) (data def.DataList, err error) {
 	if getNum <= 0 {
 		return
@@ -636,7 +643,7 @@ func (ll *LevelDbList) GetDataById(dbName, listName string, start, getNum uint64
 	return
 }
 
-// GetDataById 根据id查找数据 生序
+// GetDataByIdEsc 根据id查找数据 生序
 func (ll *LevelDbList) GetDataByIdEsc(dbName, listName string, start, getNum uint64) (data def.DataList, err error) {
 	if getNum <= 0 {
 		return
