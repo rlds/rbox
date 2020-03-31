@@ -20,11 +20,13 @@ import (
    系统信息
 */
 type (
+
 	//工具的信息
 	boxInfo struct {
 		def.BoxInfo
-		isAlive  bool   //是否活着可用
-		connType string //接入方式 nats 或 http
+		isAlive   bool           //是否活着可用
+		connType  string         //接入方式 nats 或 http
+		boxClient base.BoxClient //box客户端
 	}
 
 	//工具大类别信息
@@ -218,13 +220,15 @@ func (s *sysdata) AddBox(bx def.BoxInfo) (err error) {
 	bif.ApiVersion = bx.ApiVersion
 	bif.ModeInfo = bx.ModeInfo
 
-	//重新探测进行连接
-
+	// 重新探测进行连接
 	bif.isAlive = true
 	bif.connType = bx.Mode
 	if bx.Mode == "http" && len(bx.ModeInfo) < 10 {
 		bx.ModeInfo = "http://localhost" + bx.ModeInfo
 	}
+
+	// 客户端初始化
+	err = bif.Init()
 	return
 }
 
@@ -279,12 +283,14 @@ func (s *sysdata) checkeAlive() {
 	for {
 		for _, bgf := range s.mbgf {
 			for _, v := range bgf.mbif {
-				if v.connType == "http" {
-					v.isAlive = pingBox(v.ModeInfo + "/ping")
-					if !v.isAlive {
-						Log(v.Name, " 心跳检测失效，将不可用")
-					}
-				}
+				out := ""
+				v.isAlive = v.boxClient.Ping("", &out)
+				// if v.connType == "http" {
+				// 	v.isAlive = pingBox(v.ModeInfo + "/ping")
+				// 	if !v.isAlive {
+				// 		Log(v.Name, " 心跳检测失效，将不可用", v.ModeInfo)
+				// 	}
+				// }
 			}
 		}
 		time.Sleep(sleepTime)

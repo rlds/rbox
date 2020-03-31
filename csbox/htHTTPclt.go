@@ -181,7 +181,7 @@ RECONNECT:
 	} else {
 		if reTimes < requestRetryTimes {
 			reTimes++
-			Log("尝试第[", reTimes, "] 次重新连接")
+			Log("尝试第[", reTimes, "] 次重新连接", urlstr)
 			goto RECONNECT
 		}
 	}

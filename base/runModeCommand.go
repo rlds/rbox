@@ -30,9 +30,10 @@ func (c *commandModeWorker) Register() {
 //命令行功能执行
 func (c *commandModeWorker) Run() {
 	c.Register()
-	task_id := "commandtask"
-	box.DoWork(task_id, c.input)
-	res := box.Output(task_id)
+	taskid := "commandtask"
+	c.input.IsSync = true
+	box.DoWork(taskid, c.input)
+	res := box.Output(taskid)
 	if res.Code == OutputRetuen_Success {
 		Log("返回结果格式:", res.Type)
 		Log("命令执行成功结果如下:\n")

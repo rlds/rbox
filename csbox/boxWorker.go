@@ -8,21 +8,27 @@
 package main
 
 import (
-	"encoding/json"
-
+	"github.com/rlds/rbox/base"
 	"github.com/rlds/rbox/base/def"
-	"github.com/rlds/rbox/base/util"
 )
+
+func (b *boxInfo) Init() (err error) {
+	if b.isAlive {
+		b.boxClient, err = base.NewBoxClient(&b.BoxInfo)
+	}
+	return
+}
 
 /*
    开始执行任务
 */
 func (b *boxInfo) DoWork(indat def.RequestIn) (rt def.BoxOutPut) {
+	var err error
 	if b.isAlive {
 		switch b.connType {
-		case "http":
+		case "http", "rpc":
 			{
-				rt = b.httpMode(indat)
+				err = b.boxClient.Call(indat, &rt)
 			}
 		case "nats":
 			{
@@ -33,12 +39,20 @@ func (b *boxInfo) DoWork(indat def.RequestIn) (rt def.BoxOutPut) {
 				rt.Type = CallBoxResTypeCallErr
 				rt.Code = CallBoxCodeInputErr103
 				rt.ReturnMsg = "connType err"
+				rt.Status = "COMPLETE"
 			}
 		}
 	} else {
 		rt.Type = CallBoxResTypeCallErr
 		rt.Code = CallBoxCodeInputErr104
 		rt.ReturnMsg = "not alive"
+		rt.Status = "COMPLETE"
+	}
+	if err != nil {
+		rt.Type = CallBoxResTypeBoxRetErr
+		rt.Code = CallBoxCodeBoxRetErr110
+		rt.ReturnMsg = "BoxRetError"
+		rt.Status = "COMPLETE"
 	}
 	return
 }
@@ -47,11 +61,13 @@ func (b *boxInfo) DoWork(indat def.RequestIn) (rt def.BoxOutPut) {
  开始执行任务
 */
 func (b *boxInfo) TaskRes(indat def.RequestIn) (rt def.BoxOutPut) {
+	indat.Input.IsSync = b.IsSync
+	var err error
 	if b.isAlive {
 		switch b.connType {
-		case "http":
+		case "http", "rpc":
 			{
-				rt = b.httpModeTaskRes(indat)
+				err = b.boxClient.Status(indat, &rt)
 			}
 		case "nats":
 			{
@@ -68,54 +84,13 @@ func (b *boxInfo) TaskRes(indat def.RequestIn) (rt def.BoxOutPut) {
 		rt.Type = CallBoxResTypeCallErr
 		rt.Code = CallBoxCodeInputErr104
 		rt.ReturnMsg = "not alive"
+		rt.Status = "COMPLETE"
 	}
-	return
-}
-
-//http模式访问执行
-func (b *boxInfo) httpMode(indat def.RequestIn) (rt def.BoxOutPut) {
-	urlpath := b.ModeInfo + "/call/" + b.Group + "/" + b.Name
-	retb, err := HTTPPostJSON(urlpath, util.ObjToStr(indat))
-	if err == nil {
-		err = json.Unmarshal(retb, &rt)
-		if err != nil {
-			rt.Type = CallBoxResTypeBoxRetErr
-			rt.Code = CallBoxCodeBoxRetErr110
-			rt.ReturnMsg = "BoxRetError"
-		}
-
-		//成功返回  不修改返回状态
-		//rt.Type      = BoxOutPut_CallBox_Ok
-		//rt.Code      = BoxOutPut_Code_Ok
-	} else {
+	if err != nil {
 		rt.Type = CallBoxResTypeBoxRetErr
 		rt.Code = CallBoxCodeBoxRetErr110
 		rt.ReturnMsg = "BoxRetError"
-	}
-	return
-}
-
-//http模式访问执行
-func (b *boxInfo) httpModeTaskRes(indat def.RequestIn) (rt def.BoxOutPut) {
-	urlpath := b.ModeInfo + "/taskRes/" + b.Group + "/" + b.Name
-	//println(urlpath)
-	retb, err := HTTPPostJSON(urlpath, util.ObjToStr(indat))
-	if err == nil {
-		err = json.Unmarshal(retb, &rt)
-		if err != nil {
-			rt.Type = CallBoxResTypeBoxRetErr
-			rt.Code = CallBoxCodeBoxRetErr110
-			rt.ReturnMsg = "BoxRetError"
-		}
-
-		//成功返回  不修改返回状态
-		//rt.Type      = BoxOutPut_CallBox_Ok
-		//rt.Code      = BoxOutPut_Code_Ok
-
-	} else {
-		rt.Type = CallBoxResTypeBoxRetErr
-		rt.Code = CallBoxCodeBoxRetErr110
-		rt.ReturnMsg = "BoxRetError"
+		rt.Status = "COMPLETE"
 	}
 	return
 }
@@ -134,9 +109,4 @@ func (b *boxInfo) natsModeTaskRes(indat def.RequestIn) (rt def.BoxOutPut) {
 	//
 	//println(natstopic)
 	return
-}
-
-//连接检测
-func (b *boxInfo) conn() bool {
-	return true
 }

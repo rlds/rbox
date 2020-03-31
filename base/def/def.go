@@ -7,6 +7,8 @@
 //
 package def
 
+import "strings"
+
 /*
    基础的结构定义
 */
@@ -14,6 +16,7 @@ package def
 type (
 	//配置信息的定义结构
 	BoxInfo struct {
+		RegAddr  string //注册时获得的地址信息
 		Group    string //工具分组代码
 		Name     string //工具名称
 		ShowName string //工具展示名称
@@ -24,9 +27,11 @@ type (
 		Mode        string       //启动模式
 		Version     string       //工具版本
 		ApiVersion  string       //使用的api版本
+		IsSync      bool         //是否同步模式执行
 
 		//对应模式的连接方式
 		//若为http则为http地址端口
+		//若为rpc则为rpc监听地址端口
 		//若为nats则为nats监听topic
 		ModeInfo string
 	}
@@ -64,8 +69,10 @@ type (
 	}
 
 	InputData struct {
-		//		RemoteInfo string                 // 请求来源信息 默认传入请求ip地址
-		SubBoxName string                 // 数据类型
+		TaskId     string
+		RemoteInfo string                 // 请求来源信息 默认传入请求ip地址
+		IsSync     bool                   // 是否同步模式执行
+		SubBoxName string                 // 子模块名
 		Data       map[string]interface{} // 数据内容
 	}
 
@@ -87,4 +94,20 @@ func (b *BoxInfo) InfoOk() bool {
 		return false
 	}
 	return true
+}
+
+// SetModeInfo 看设置的端口是否正确
+func (b *BoxInfo) SetModeInfo(host string) {
+	b.RegAddr = host
+	if b.Mode == "http" {
+		arr := strings.Split(b.ModeInfo, ":")
+		iarr := strings.Split(host, ":")
+		if len(arr) > 2 {
+			if ("//" + iarr[1]) != arr[1] {
+				b.ModeInfo = arr[0] + "://" + iarr[0] + ":" + arr[2]
+			}
+		} else {
+			b.ModeInfo = arr[0] + ":" + iarr[0] + ":8080"
+		}
+	}
 }

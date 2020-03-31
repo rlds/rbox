@@ -85,7 +85,9 @@ func (h *httpModeWorker) boxServ(w http.ResponseWriter, r *http.Request) {
 			hres.Code = OutputRetuen_Error
 			hres.ReturnMsg = err.Error()
 		} else {
-			Log("call T:", hi.TaskId, " F:", hi.From, " C:", hi.Call, " I:", hi.Input)
+			Log("call T:", hi.TaskId, " F:", hi.From, " C:", hi.Call) //, " I:", hi.Input)
+			// Log("call T:", hi.TaskId, " F:", hi.From, " C:", hi.Call, " I:", hi.Input)
+			// hi.Input.TaskId = hi.TaskId
 			box.DoWork(hi.TaskId, hi.Input)
 			hres = box.Output(hi.TaskId)
 			hres.TaskId = hi.TaskId
@@ -136,3 +138,15 @@ func (h *httpModeWorker) ping(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte("ok"))
 }
+
+/*
+var cltMap map[string]*http.Client
+
+func HttpModeCallBox(group, boxname string, indata InputData) (rtype string, data interface{}) {
+	key := group + boxname
+	if cltMap == nil {
+		cltMap = make(map[string]*http.Client)
+	}
+
+}
+*/
