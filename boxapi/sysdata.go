@@ -153,12 +153,12 @@ var (
 
 //系统初始化准备
 func (s *sysdata) Init() {
-	setTmplFilePath()
+	// setTmplFilePath()
 
 	s.mbgf = make(map[string]*boxGroupInfo)
 
 	//相关接口的初始化注册初始化
-	s.tp = tid.NewTaskID("WS")
+	s.tp = tid.NewTaskID("bp")
 
 	s.hb = NewWhbeat()
 

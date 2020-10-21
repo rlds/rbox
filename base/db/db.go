@@ -68,14 +68,25 @@ type ListInfo struct {
 	def.ListInfo
 }
 
+// 使用较小内存
 var defaultLevelDbOption = LevelDbOptions{
-	BlockCacheCapacity:   opt.MiB * 800, //
-	BlockSize:            opt.KiB * 800,
-	CompactionTableSize:  opt.MiB * 200, //单个数据文件的最大大小
-	CompactionTotalSize:  opt.MiB * 1000,
-	IteratorSamplingRate: opt.MiB * 200,
-	WriteBuffer:          opt.MiB * 400, //日志的最大大小
+	BlockCacheCapacity:   opt.MiB * 8, //
+	BlockSize:            opt.KiB * 8,
+	CompactionTableSize:  opt.MiB * 2, //单个数据文件的最大大小
+	CompactionTotalSize:  opt.MiB * 10,
+	IteratorSamplingRate: opt.MiB * 2,
+	WriteBuffer:          opt.MiB * 4, //日志的最大大小
 }
+
+// 使用较大内存
+// var defaultLevelDbOption = LevelDbOptions{
+// 	BlockCacheCapacity:   opt.MiB * 800, //
+// 	BlockSize:            opt.KiB * 800,
+// 	CompactionTableSize:  opt.MiB * 200, //单个数据文件的最大大小
+// 	CompactionTotalSize:  opt.MiB * 1000,
+// 	IteratorSamplingRate: opt.MiB * 200,
+// 	WriteBuffer:          opt.MiB * 400, //日志的最大大小
+// }
 
 // LevelDbList 列表的处理
 type LevelDbList struct {
